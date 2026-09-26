@@ -2,3 +2,5 @@ assets/
 __pycache__/
 *.blend1
 renders/*.log
+# unoptimised USDZ exports exceed GitHub's 100 MB file limit
+exports/
