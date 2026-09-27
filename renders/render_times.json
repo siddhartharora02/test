@@ -1,0 +1,29 @@
+{
+  "entrance": {
+    "seconds": 1720.9,
+    "quality": "final",
+    "samples": 256,
+    "resolution": [
+      1920,
+      1200
+    ]
+  },
+  "desk": {
+    "seconds": 2057.5,
+    "quality": "final",
+    "samples": 256,
+    "resolution": [
+      1920,
+      1200
+    ]
+  },
+  "cutaway": {
+    "seconds": 497.6,
+    "quality": "final",
+    "samples": 256,
+    "resolution": [
+      1920,
+      1200
+    ]
+  }
+}
