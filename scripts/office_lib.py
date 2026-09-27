@@ -207,7 +207,7 @@ def mesh_obj(name, bm, mats, coll, parent=None, bevel=0.0, segs=3, uv=True, uv_r
     return ob
 
 
-def box_obj(name, p0, p1, mats, coll, parent=None, bevel=0.0, segs=3, uv_rot=False, face_mats=None, uv_offset=(0, 0)):
+def box_obj(name, p0, p1, mats, coll, parent=None, bevel=0.0, segs=3, uv_rot=False, face_mats=None, uv_offset=(0, 0), subsurf=0):
     """Box object. face_mats maps '+x','-x','+y','-y','+z','-z' -> material slot index."""
     bm = bmesh.new()
     _, faces = bm_box(bm, p0, p1)
@@ -218,7 +218,7 @@ def box_obj(name, p0, p1, mats, coll, parent=None, bevel=0.0, segs=3, uv_rot=Fal
             for key, idx in face_mats.items():
                 if f.normal.dot(axes[key]) > 0.99:
                     f.material_index = idx
-    return mesh_obj(name, bm, mats, coll, parent=parent, bevel=bevel, segs=segs, uv_rot=uv_rot, uv_offset=uv_offset)
+    return mesh_obj(name, bm, mats, coll, parent=parent, bevel=bevel, segs=segs, uv_rot=uv_rot, uv_offset=uv_offset, subsurf=subsurf)
 
 
 def cable(name, pts, radius, mat, coll, parent=None):
@@ -750,6 +750,20 @@ def art_print(seed=5, W=900, H=1200):
     img[int(base_y) :, :] = hex01("#C9B79C")
     img[int(base_y) : int(base_y) + 6, :] = hex01("#2F3A40")
     # paper grain
+    img *= (1.0 + rng.normal(0, 0.012, (H, W, 1))).astype(np.float32)
+    return img
+
+
+def art_hills(seed=6, W=900, H=1200):
+    """Companion print: layered hills and a low sun, same muted palette."""
+    rng = np.random.default_rng(seed)
+    img = np.ones((H, W, 3), np.float32) * hex01("#EFE7DA")
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    m = (xx - W * 0.35) ** 2 + (yy - H * 0.42) ** 2 <= (W * 0.13) ** 2
+    img[m] = hex01("#C9643E")
+    for base, amp, ph, col in ((0.55, 0.06, 0.3, "#9FA88C"), (0.66, 0.07, 1.9, "#6F7A5E"), (0.78, 0.05, 3.1, "#3E4A45")):
+        ridge = H * base + H * amp * np.sin(xx / W * 2 * math.pi * 0.8 + ph)
+        img[yy >= ridge] = hex01(col)
     img *= (1.0 + rng.normal(0, 0.012, (H, W, 1))).astype(np.float32)
     return img
 

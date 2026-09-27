@@ -1,6 +1,6 @@
 {
   "entrance": {
-    "seconds": 42.9,
+    "seconds": 39.8,
     "quality": "preview",
     "samples": 32,
     "resolution": [
@@ -9,7 +9,7 @@
     ]
   },
   "desk": {
-    "seconds": 32.4,
+    "seconds": 32.9,
     "quality": "preview",
     "samples": 32,
     "resolution": [
@@ -18,7 +18,7 @@
     ]
   },
   "cutaway": {
-    "seconds": 12.4,
+    "seconds": 13.0,
     "quality": "preview",
     "samples": 32,
     "resolution": [

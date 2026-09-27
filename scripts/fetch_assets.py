@@ -36,6 +36,8 @@ PH_TEXTURES = {  # id -> resolution; maps: diffuse, normal (GL), roughness, disp
     "laminate_floor_02": "2k",  # wood-look plank floor tiles
     "oak_veneer_01": "2k",  # desk top, shelves, cabinet top
     "rough_linen": "2k",  # sheer curtains
+    "curly_teddy_natural": "2k",  # boucle sofa
+    "velour_velvet": "1k",  # velvet cushions
 }
 
 PH_MODELS = {
@@ -62,6 +64,7 @@ ACG_TEXTURES = {
     "PaintedPlaster017": "2K",  # painted walls / ceiling
     "Metal032": "2K",  # brushed metal
     "Fabric031": "2K",  # office chair upholstery
+    "Marble012": "2K",  # white marble-look floor slabs (800x2400 stoneware)
 }
 
 

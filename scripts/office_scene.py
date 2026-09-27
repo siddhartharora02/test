@@ -39,7 +39,7 @@ T_EAST, T_SOUTH, T_NORTH, T_WEST = 9 / 12, 9 / 12, 4.5 / 12, 4.5 / 12
 
 WINDOW_Y0 = 7.75  # east wall, from south inner wall
 WINDOW_W = 6.0
-WINDOW_SILL = 3.0
+WINDOW_SILL = 1.5  # low sill (site photos)
 WINDOW_LINTEL = 7.0
 CHAJJA_DEPTH = 1.75  # concrete sunshade outside, above the lintel
 
@@ -53,11 +53,11 @@ SKIRTING_H = 4 / 12
 SKIRTING_T = 0.4 / 12
 
 # Desk on the north wall
-DESK_X0, DESK_X1 = ROOM_W - 9.5, ROOM_W - 2.5  # 2'-6" .. 9'-6" from the east wall
+DESK_X0, DESK_X1 = ROOM_W - 1.75 - 5.0, ROOM_W - 1.75  # 5' standing desk, right end 1'-9" from the window wall
 DESK_D = 2.5
 DESK_H = 2.5  # top surface (30")
 DESK_TOP_T = 1 / 12
-MON_CX = 5.9  # centre of the dual-monitor setup
+MON_CX = (DESK_X0 + DESK_X1) / 2  # centre of the dual-monitor setup
 PEDESTAL = dict(x0=2.7, x1=4.05, d=1.7, h=2.05)
 
 # Storage wall on the south wall
@@ -82,13 +82,25 @@ PENDANT_DROP = 3.25  # pendant bottom above the table top
 
 # West wall
 WHITEBOARD = dict(yc=11.3, zc=4.9, w=4.0, h=3.0)
-AC = dict(yc=11.3, z_top=9.45, w=2.95, h=0.98, d=0.72)
-PLANTS = {"potted_plant_01": (10.85, 15.3, 20), "potted_plant_02": (0.95, 1.0, -30)}
-OFFICE_CHAIRS = [("office_chair_1", (MON_CX, 12.65), 0.0), ("office_chair_2", (8.55, 12.35), 28.0)]
+AC = dict(xc=6.0, z_top=9.0, w=2.95, h=0.98, d=0.72)  # on the north wall (site points)
+PLANTS = {"potted_plant_02": (11.05, 15.3, 20), "potted_plant_01": (2.55, 1.15, -30)}
+OFFICE_CHAIRS = [("office_chair_1", (MON_CX, 12.7), 0.0)]
 
 # Downlights (x, y) in the ceiling
-DOWNLIGHTS = [(3.75, 2.55), (8.75, 2.55), (3.5, 8.6), (8.25, 9.4), (3.75, 14.45), (8.25, 14.45)]
-SHELF_LED_W = 0.6  # warm LED strip under each shelf (per bay)
+# Dropped (false) ceiling from the site photos: perimeter band + rounded two-step tray
+FALSE_CEIL = dict(band_z=9.25, band_t=0.25, band_inset=2.0, band_r=1.4, step_z=9.62, step_inset=2.55, step_r=1.1)
+LINEAR_LIGHTS = [(4.3, 5.2, 8.8), (7.7, 6.6, 10.5)]  # (x, y0, y1) flush LED profiles in the two existing channels
+CEILING_POINTS = [(6.0, 5.95), (6.0, 9.65)]  # two existing ceiling points -> small surface spots
+COVE_W = 4.5  # per side, warm cove LED on top of the band
+LINEAR_W = 5.0
+PUCK_W = 3.0
+# Video-call backdrop on the south wall
+BACKDROP_COLOR = "#8C9780"  # sage limewash
+SOFA = dict(xc=7.0, w=7.0, d=3.1)
+LEDGE = dict(x0=4.3, x1=9.7, z=5.55, d=0.42)
+FLOOR_LAMP = (11.15, 1.3)
+NEON = dict(xc=3.35, z=6.3, r=0.22)
+LAMP_W = 22.0
 ART = dict(yc=4.1, zc=5.1, w=2.0, h=2.67)  # framed print on the east wall, south of the window
 
 # Lighting / exposure
@@ -105,8 +117,8 @@ WHITE_BALANCE_TINT = -6.0
 
 CAMERA_H = 4.25  # 4'-3"
 VIEWS = {
-    "entrance": dict(file="01_entrance.png", pos=(-0.85, 1.35, CAMERA_H), heading=41.0, lens=24, shift_x=0.0, shift_y=0.02, hide=[], exposure=EXPOSURE, wb=4300),
-    "desk": dict(file="02_desk_videocall.png", pos=(6.1, 13.0, CAMERA_H), heading=-90.0, lens=24, shift_x=0.0, shift_y=0.0, hide=["office_chair_1"], exposure=EXPOSURE + 0.3, wb=3600),
+    "entrance": dict(file="01_entrance.png", pos=(-0.85, 1.35, CAMERA_H), heading=43.0, lens=24, shift_x=0.0, shift_y=0.04, hide=[], exposure=EXPOSURE - 0.55, wb=4400),
+    "desk": dict(file="02_desk_videocall.png", pos=(MON_CX, 13.3, CAMERA_H), heading=-90.0, lens=26, shift_x=0.0, shift_y=0.0, hide=["office_chair_1"], exposure=EXPOSURE + 0.1, wb=4200),
     "cutaway": dict(file="03_cutaway.png", pos=(3.6, -12.5, 31.0), target=(3.9, 8.1, 0.0), lens=31, hide=[], cutaway=True, exposure=EXPOSURE + 0.5, wb=4300),
 }
 
@@ -155,7 +167,17 @@ def build_materials():
     M["accent"] = L.pbr_mat("wall_slate", plaster, size=2.2, color=srgb("#3D4850"), color_var=0.10, rough=(0.7, 0.88), normal=0.18)
     M["ceiling"] = L.pbr_mat("ceiling", plaster, size=2.5, color=srgb("#F2F0EB"), color_var=0.04, rough=(0.8, 0.95), normal=0.08)
     M["section"] = L.simple_mat("section_cut", srgb("#121212"), rough=0.95, spec=0.2)
-    M["floor"] = L.pbr_mat("floor_wood_tile", ph["laminate_floor_02"], size=1.7, rough=(0.16, 0.42), normal=0.5, coat=0.35, coat_rough=0.12, value=1.0, sat=0.78)
+    M["floor"] = marble_floor_mat(acg["Marble012"])
+    M["clay"] = L.pbr_mat("wall_sage_limewash", plaster, size=1.6, color=srgb(BACKDROP_COLOR), color_var=0.32, rough=(0.8, 0.95), normal=0.35)
+    M["boucle"] = L.pbr_mat("boucle", ph["curly_teddy_natural"], size=0.3, value=0.72, sat=0.55, tint=srgb("#E4DFD5"), normal=1.2, rough=(0.85, 1.0), sheen=0.7)
+    M["velvet_olive"] = L.pbr_mat("velvet_teal", ph["velour_velvet"], size=0.4, color=srgb("#2E5557"), color_var=0.35, normal=0.6, rough=(0.55, 0.75), sheen=1.0)
+    M["linen_rust"] = L.pbr_mat("linen_rust", ph["rough_linen"], size=0.27, color=srgb("#8C3D22"), color_var=0.25, normal=0.9, rough=(0.8, 0.95), sheen=0.5)
+    M["linen_ochre"] = L.pbr_mat("linen_ochre", ph["rough_linen"], size=0.27, color=srgb("#C99A45"), color_var=0.25, normal=0.9, rough=(0.8, 0.95), sheen=0.5)
+    M["knit_cream"] = L.pbr_mat("knit_cream", acg["Fabric031"], size=0.12, color=srgb("#E9E1D2"), color_var=0.3, normal=1.2, rough=(0.85, 1.0), sheen=0.6)
+    M["alu_grey"] = L.simple_mat("window_alu_grey", srgb("#9A9EA2"), rough=0.35, metallic=0.8)
+    M["shade"] = lamp_shade_mat()
+    M["neon"] = L.simple_mat("neon_warm", srgb("#FFB067"), rough=0.3, emission=srgb("#FF9A45"), emission_strength=10.0)
+    M["cove_led"] = L.simple_mat("linear_led", (1, 1, 1, 1), rough=0.4, emission=(*kelvin(3000), 1), emission_strength=12.0)
     M["fabric_oat"] = L.pbr_mat("fabric_oatmeal", acg["Fabric031"], size=0.25, tint=srgb("#CFC6B8"), value=1.25, sat=0.4, normal=0.8, rough=(0.8, 0.95), sheen=0.6)
     M["oak"] = L.pbr_mat("oak", ph["oak_veneer_01"], size=1.4, rough=(0.38, 0.62), normal=0.35, coat=0.2, coat_rough=0.25)
     M["teak"] = L.pbr_mat("door_teak", ph["oak_veneer_01"], size=1.2, rough=(0.3, 0.55), normal=0.3, value=0.55, tint=srgb("#C88A5A"), coat=0.35, coat_rough=0.18)
@@ -202,6 +224,7 @@ def build_materials():
     M["screen_dash"] = L.image_mat("screen_dash", L.np_to_image("img_dash", L.screen_dashboard()), emission=SCREEN_NITS * 0.8, rough=0.18)
     M["screen_mail"] = L.image_mat("screen_mail", L.np_to_image("img_mail", L.screen_mail()), emission=SCREEN_NITS * 0.8, rough=0.1, coat=0.6)
     M["art"] = L.image_mat("art_print", L.np_to_image("img_art", L.art_print()), rough=0.8, spec=0.3)
+    M["art2"] = L.image_mat("art_print_hills", L.np_to_image("img_art2", L.art_hills()), rough=0.8, spec=0.3)
     led = L.simple_mat("led_strip", (1, 1, 1, 1), rough=0.4)
     nt = led.node_tree
     b = next(n for n in nt.nodes if n.bl_idname == "ShaderNodeBsdfPrincipled")
@@ -214,6 +237,83 @@ def build_materials():
     nt.links.new(mul.outputs[0], b.inputs["Emission Strength"])
     M["led_strip"] = led
     M["whiteboard"] = L.image_mat("whiteboard_surface", L.np_to_image("img_whiteboard", L.whiteboard_image()), rough=0.07, spec=0.6, coat=0.6)
+
+
+def marble_floor_mat(maps):
+    """800 x 2400 mm polished stoneware slabs: marble map re-offset per slab + thin grout joints."""
+    m, nt, b, _ = L._new_material("floor_marble_slabs")
+    N, Lk = nt.nodes, nt.links
+    tc = N.new("ShaderNodeTexCoord")
+    sep = N.new("ShaderNodeSeparateXYZ")
+    Lk.new(tc.outputs["UV"], sep.inputs[0])
+
+    def math(op, a, bval=None, c=None):
+        n = N.new("ShaderNodeMath")
+        n.operation = op
+        for i, v in enumerate((a, bval, c)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)):
+                n.inputs[i].default_value = v
+            else:
+                Lk.new(v, n.inputs[i])
+        return n.outputs[0]
+
+    tw, tl, size = 0.8, 2.4, 1.6  # slab width (x), length (y), marble map tile size
+    u, v = sep.outputs[0], sep.outputs[1]
+    ui, vi = math("FLOOR", math("DIVIDE", u, tw)), math("FLOOR", math("DIVIDE", v, tl))
+    ox = math("MULTIPLY", math("FRACT", math("ADD", math("MULTIPLY", ui, 0.618), math("MULTIPLY", vi, 0.371))), 3.0)
+    oy = math("MULTIPLY", math("FRACT", math("ADD", math("MULTIPLY", ui, 0.297), math("MULTIPLY", vi, 0.733))), 3.0)
+    cu, cv = math("ADD", math("DIVIDE", u, size), ox), math("ADD", math("DIVIDE", v, size), oy)
+    comb = N.new("ShaderNodeCombineXYZ")
+    Lk.new(cu, comb.inputs[0])
+    Lk.new(cv, comb.inputs[1])
+    imgs = {}
+    for key, nc in (("diff", False), ("rough", True), ("nor_gl", True)):
+        n = L._img(nt, maps[key], nc)
+        Lk.new(comb.outputs[0], n.inputs["Vector"])
+        imgs[key] = n
+    # joint mask: distance (m) to the nearest slab edge < 1.2 mm
+    fu, fv = math("FRACT", math("DIVIDE", u, tw)), math("FRACT", math("DIVIDE", v, tl))
+    du = math("MULTIPLY", math("MINIMUM", fu, math("SUBTRACT", 1.0, fu)), tw)
+    dv = math("MULTIPLY", math("MINIMUM", fv, math("SUBTRACT", 1.0, fv)), tl)
+    joint = math("LESS_THAN", math("MINIMUM", du, dv), 0.0012)
+    col = N.new("ShaderNodeMix")
+    col.data_type = "RGBA"
+    Lk.new(joint, col.inputs[0])
+    hs = N.new("ShaderNodeHueSaturation")
+    hs.inputs["Saturation"].default_value = 0.6
+    hs.inputs["Value"].default_value = 1.08
+    Lk.new(imgs["diff"].outputs["Color"], hs.inputs["Color"])
+    Lk.new(hs.outputs[0], col.inputs[6])
+    col.inputs[7].default_value = srgb("#9C9A94")
+    Lk.new(col.outputs[2], b.inputs["Base Color"])
+    rr = N.new("ShaderNodeMapRange")
+    rr.inputs["To Min"].default_value = 0.06
+    rr.inputs["To Max"].default_value = 0.2
+    Lk.new(imgs["rough"].outputs["Color"], rr.inputs["Value"])
+    Lk.new(math("MAXIMUM", rr.outputs["Result"], math("MULTIPLY", joint, 0.8)), b.inputs["Roughness"])
+    nm = N.new("ShaderNodeNormalMap")
+    nm.inputs["Strength"].default_value = 0.15
+    Lk.new(imgs["nor_gl"].outputs["Color"], nm.inputs["Color"])
+    Lk.new(nm.outputs[0], b.inputs["Normal"])
+    b.inputs["Coat Weight"].default_value = 0.3
+    b.inputs["Coat Roughness"].default_value = 0.05
+    return m
+
+
+def lamp_shade_mat():
+    m, nt, b, out = L._new_material("linen_lamp_shade")
+    b.inputs["Base Color"].default_value = srgb("#EDE3CF")
+    b.inputs["Roughness"].default_value = 0.9
+    tl = nt.nodes.new("ShaderNodeBsdfTranslucent")
+    tl.inputs["Color"].default_value = srgb("#F2C98E")
+    mx = nt.nodes.new("ShaderNodeMixShader")
+    mx.inputs[0].default_value = 0.55
+    nt.links.new(b.outputs[0], mx.inputs[1])
+    nt.links.new(tl.outputs[0], mx.inputs[2])
+    nt.links.new(mx.outputs[0], out.inputs["Surface"])
+    return m
 
 
 def rug_material(maps):
@@ -336,10 +436,11 @@ def build_architecture():
     reg("outside", fbox("chajja", (E1, wy0 - 0.5, WINDOW_LINTEL + 0.35), (E1 + CHAJJA_DEPTH, wy1 + 0.5, WINDOW_LINTEL + 0.7), M["wall"], c, bevel=0.01))
 
     # --- north wall: slate accent on the room face ---
-    fbox("wall_N", (-T_WEST, ROOM_L, 0), (E1, ROOM_L + T_NORTH, CEIL_H), [wall, sec, accent], c, face_mats={"+z": 1, "-x": 1, "+y": 1, "-y": 2})
+    fbox("wall_N", (-T_WEST, ROOM_L, 0), (E1, ROOM_L + T_NORTH, CEIL_H), [wall, sec], c, face_mats={"+z": 1, "-x": 1, "+y": 1})
 
     # --- south wall (runs along the passage too) ---
-    reg("cut", fbox("wall_S", (xw0, -T_SOUTH, 0), (E1, 0, CEIL_H), [wall, sec], c, face_mats=top))
+    reg("cut", fbox("wall_S", (0, -T_SOUTH, 0), (E1, 0, CEIL_H), [wall, sec, M["clay"]], c, face_mats={"+z": 1, "+y": 2}))
+    reg("cut", fbox("wall_S_passage", (xw0, -T_SOUTH, 0), (0, 0, CEIL_H), [wall, sec], c, face_mats=top))
 
     # --- west wall (partition to the pantry), from the passage to the north wall ---
     reg("cut", fbox("wall_W", (-T_WEST, PASSAGE_W, 0), (0, ROOM_L + T_NORTH, CEIL_H), [wall, sec], c, face_mats=top))
@@ -357,7 +458,104 @@ def build_architecture():
     build_skirting()
     build_window()
     build_door()
-    build_downlights()
+    build_false_ceiling()
+
+
+def rounded_rect_pts(x0, y0, x1, y1, r, seg=12):
+    pts = []
+    for cx, cy, a0 in ((x1 - r, y0 + r, -90), (x1 - r, y1 - r, 0), (x0 + r, y1 - r, 90), (x0 + r, y0 + r, 180)):
+        for i in range(seg + 1):
+            a = math.radians(a0 + 90 * i / seg)
+            pts.append((cx + r * math.cos(a), cy + r * math.sin(a)))
+    return pts
+
+
+def ceiling_ring(name, inset, r, z0, z1):
+    """Ceiling plate over the whole room with a rounded-rectangle opening (feet)."""
+    c = C["arch"]
+    plate = fbox(name, (-0.01, -0.01, z0), (ROOM_W + 0.01, ROOM_L + 0.01, z1), M["ceiling"], c)
+    bm = bmesh.new()
+    outline = rounded_rect_pts(F(inset), F(inset), F(ROOM_W - inset), F(ROOM_L - inset), F(r))
+    lo = [bm.verts.new((x, y, F(z0) - 0.05)) for x, y in outline]
+    hi = [bm.verts.new((x, y, F(z1) + 0.05)) for x, y in outline]
+    n = len(outline)
+    for i in range(n):
+        bm.faces.new((lo[i], lo[(i + 1) % n], hi[(i + 1) % n], hi[i]))
+    bm.faces.new(list(reversed(lo)))
+    bm.faces.new(hi)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
+    cutter = L.mesh_obj(name + "_cutter", bm, M["ceiling"], C["protos"], uv=False)
+    mod = plate.modifiers.new("opening", "BOOLEAN")
+    mod.operation = "DIFFERENCE"
+    mod.solver = "EXACT"
+    mod.object = cutter
+    return plate
+
+
+def build_false_ceiling():
+    """Band + stepped tray from the site photos, warm cove LED, flush linear LEDs, two surface spots."""
+    fc = FALSE_CEIL
+    c = C["arch"]
+    objs = [
+        ceiling_ring("false_ceiling_band", fc["band_inset"], fc["band_r"], fc["band_z"], fc["band_z"] + fc["band_t"]),
+        ceiling_ring("false_ceiling_step", fc["step_inset"], fc["step_r"], fc["step_z"], CEIL_H),
+    ]
+    # cove LED: sits on top of the band just behind its edge, washing the step above
+    zi = fc["band_z"] + fc["band_t"] + 0.01
+    ins = fc["band_inset"] + 0.12
+    for i, (xa, ya, xb, yb) in enumerate(((ins, ins, ROOM_W - ins, ins), (ins, ROOM_L - ins, ROOM_W - ins, ROOM_L - ins), (ins, ins, ins, ROOM_L - ins), (ROOM_W - ins, ins, ROOM_W - ins, ROOM_L - ins))):
+        lt = bpy.data.lights.new(f"cove_led_{i}", "AREA")
+        lt.shape = "RECTANGLE"
+        horizontal = ya == yb
+        length = (xb - xa) if horizontal else (yb - ya)
+        lt.size = F(length)
+        lt.size_y = 0.025
+        lt.energy = COVE_W * length / 8.0
+        lt.color = kelvin(2700)
+        ob = bpy.data.objects.new(f"cove_led_{i}", lt)
+        ob.location = F((xa + xb) / 2, (ya + yb) / 2, zi)
+        ob.rotation_euler = (math.pi, 0, 0 if horizontal else math.pi / 2)
+        C["lights"].objects.link(ob)
+        bm = bmesh.new()
+        L.bm_box(bm, F(min(xa, xb) - 0.03, min(ya, yb) - 0.03, zi - 0.012), F(max(xa, xb) + 0.03, max(ya, yb) + 0.03, zi - 0.004))
+        strip = L.mesh_obj(f"cove_strip_{i}", bm, M["cove_led"], c)
+        strip.visible_shadow = False
+        objs.append(strip)
+    # flush linear LED profiles in the two existing black channels (instead of track spots)
+    for i, (x, y0, y1) in enumerate(LINEAR_LIGHTS):
+        objs.append(fbox(f"linear_trim_{i}", (x - 0.05, y0, CEIL_H - 0.012), (x + 0.05, y1, CEIL_H + 0.01), M["black_metal"], c))
+        d = fbox(f"linear_diffuser_{i}", (x - 0.032, y0 + 0.02, CEIL_H - 0.02), (x + 0.032, y1 - 0.02, CEIL_H - 0.012), M["cove_led"], c)
+        d.visible_shadow = False
+        objs.append(d)
+        lt = bpy.data.lights.new(f"linear_led_{i}", "AREA")
+        lt.shape = "RECTANGLE"
+        lt.size = 0.02
+        lt.size_y = F(y1 - y0)
+        lt.energy = LINEAR_W
+        lt.color = kelvin(3000)
+        ob = bpy.data.objects.new(f"linear_led_{i}", lt)
+        ob.location = F(x, (y0 + y1) / 2, CEIL_H - 0.03)
+        C["lights"].objects.link(ob)
+    # the two ceiling points: slim surface-mounted spots
+    for i, (x, y) in enumerate(CEILING_POINTS):
+        bm = bmesh.new()
+        L.bm_cyl(bm, 0.042, 0.07, loc=F(x, y, CEIL_H) - Vector((0, 0, 0.07)), segs=40)
+        objs.append(L.mesh_obj(f"surface_spot_{i}", bm, M["plastic_white"], c, bevel=0.003))
+        bm = bmesh.new()
+        L.bm_cyl(bm, 0.03, 0.002, loc=F(x, y, CEIL_H) - Vector((0, 0, 0.072)), segs=32)
+        dd = L.mesh_obj(f"surface_spot_lens_{i}", bm, M["downlight"], c)
+        dd.visible_shadow = False
+        objs.append(dd)
+        lt = bpy.data.lights.new(f"surface_spot_{i}", "SPOT")
+        lt.energy = PUCK_W
+        lt.color = kelvin(3000)
+        lt.spot_size = math.radians(60)
+        lt.spot_blend = 0.5
+        lt.shadow_soft_size = 0.02
+        ob = bpy.data.objects.new(f"surface_spot_{i}", lt)
+        ob.location = F(x, y, CEIL_H) - Vector((0, 0, 0.08))
+        C["lights"].objects.link(ob)
+    reg("cut", *objs)
 
 
 def build_skirting():
@@ -367,8 +565,7 @@ def build_skirting():
         ("sk_N", (0, ROOM_L - t, 0), (ROOM_W, ROOM_L, h), False),
         ("sk_E", (ROOM_W - t, 0, 0), (ROOM_W, ROOM_L, h), False),
         ("sk_W", (0, PASSAGE_W, 0), (t, ROOM_L, h), True),
-        ("sk_S_room_w", (-PASSAGE_LEN, 0, 0), (STORE_X0, t, h), True),
-        ("sk_S_room_e", (STORE_X1, 0, 0), (ROOM_W, t, h), False),
+        ("sk_S", (-PASSAGE_LEN, 0, 0), (ROOM_W, t, h), True),
         ("sk_passage_N", (-PASSAGE_LEN, PASSAGE_W - t, 0), (0, PASSAGE_W, h), True),
         ("sk_door_S", (-PASSAGE_LEN, 0, 0), (-PASSAGE_LEN + t, DOOR_Y0, h), True),
         ("sk_door_N", (-PASSAGE_LEN, DOOR_Y0 + DOOR_W, 0), (-PASSAGE_LEN + t, PASSAGE_W, h), True),
@@ -380,41 +577,40 @@ def build_skirting():
 
 
 def build_window():
+    """Square-ish aluminium window (wide fixed pane + narrow openable pane) in a teak surround."""
     c = C["arch"]
     wy0, wy1 = WINDOW_Y0, WINDOW_Y0 + WINDOW_W
     zs, zl = WINDOW_SILL, WINDOW_LINTEL
     x_in = ROOM_W
-    # granite sill projecting 1" into the room
-    fbox("window_sill", (x_in - 1.25 / 12, wy0 - 0.15, zs - 1 / 12), (x_in + 0.5, wy1 + 0.15, zs), M["granite"], c, bevel=0.003)
-    # UPVC sliding window: outer frame + 2 sashes on offset tracks
-    fx0, fx1 = x_in + 0.30, x_in + 0.52  # frame depth inside the wall
-    fw = 2.6 / 12  # outer frame profile
-    frame = [
-        ((fx0, wy0, zs), (fx1, wy1, zs + fw)),
-        ((fx0, wy0, zl - fw), (fx1, wy1, zl)),
-        ((fx0, wy0, zs), (fx1, wy0 + fw, zl)),
-        ((fx0, wy1 - fw, zs), (fx1, wy1, zl)),
-    ]
+    # teak architrave on the room face
+    tw, tp = 3 / 12, 0.07
+    for i, (p0, p1, rot) in enumerate((((x_in - tp, wy0 - tw, zs - tw), (x_in, wy1 + tw, zs), True), ((x_in - tp, wy0 - tw, zl), (x_in, wy1 + tw, zl + tw), True), ((x_in - tp, wy0 - tw, zs), (x_in, wy0, zl), False), ((x_in - tp, wy1, zs), (x_in, wy1 + tw, zl), False))):
+        fbox(f"window_teak_{i}", p0, p1, M["teak"], c, bevel=0.002, uv_rot=rot)
+    # aluminium frame near the outer face, mullion at ~1/3 from the south jamb
+    fx0, fx1 = x_in + 0.42, x_in + 0.6
+    fw = 2.2 / 12
+    ym = wy0 + WINDOW_W * 0.36
+    frame = [((fx0, wy0, zs), (fx1, wy1, zs + fw)), ((fx0, wy0, zl - fw), (fx1, wy1, zl)), ((fx0, wy0, zs), (fx1, wy0 + fw, zl)), ((fx0, wy1 - fw, zs), (fx1, wy1, zl)), ((fx0, ym - fw / 2, zs), (fx1, ym + fw / 2, zl))]
     for i, (p0, p1) in enumerate(frame):
-        fbox(f"window_frame_{i}", p0, p1, M["upvc"], c, bevel=0.003)
-    sw = 2.0 / 12  # sash profile
-    half = (WINDOW_W - 2 * fw) / 2
-    for s in range(2):
-        y0 = wy0 + fw + s * half - (0.12 if s else 0)
-        y1 = y0 + half + 0.12
-        xa = fx0 + 0.03 + s * 0.09
-        xb = xa + 0.07
-        z0, z1 = zs + fw, zl - fw
-        parts = [((xa, y0, z0), (xb, y1, z0 + sw)), ((xa, y0, z1 - sw), (xb, y1, z1)), ((xa, y0, z0), (xb, y0 + sw, z1)), ((xa, y1 - sw, z0), (xb, y1, z1))]
-        for i, (p0, p1) in enumerate(parts):
-            fbox(f"window_sash{s}_{i}", p0, p1, M["upvc"], c, bevel=0.0025)
-        fbox(f"window_glass{s}", ((xa + xb) / 2 - 0.005, y0 + sw - 0.02, z0 + sw - 0.02), ((xa + xb) / 2 + 0.005, y1 - sw + 0.02, z1 - sw + 0.02), M["glass"], c)
-        # handle
-        hy = y1 - sw - 0.05 if s == 0 else y0 + sw + 0.05
-        fbox(f"window_handle{s}", (xa - 0.06, hy - 0.03, (z0 + z1) / 2 - 0.2), (xa, hy + 0.03, (z0 + z1) / 2 + 0.2), M["upvc"], c, bevel=0.004)
+        fbox(f"window_frame_{i}", p0, p1, M["alu_grey"], c, bevel=0.002)
+    # openable narrow sash (south pane) with its own profile
+    sw = 1.6 / 12
+    z0, z1 = zs + fw, zl - fw
+    ya, yb = wy0 + fw, ym - fw / 2
+    xa, xb = fx0 - 0.05, fx0 + 0.02
+    for i, (p0, p1) in enumerate((((xa, ya, z0), (xb, yb, z0 + sw)), ((xa, ya, z1 - sw), (xb, yb, z1)), ((xa, ya, z0), (xb, ya + sw, z1)), ((xa, yb - sw, z0), (xb, yb, z1)))):
+        fbox(f"window_sash_{i}", p0, p1, M["alu_grey"], c, bevel=0.0015)
+    fbox("window_handle", (xa - 0.05, yb - sw / 2 - 0.02, (z0 + z1) / 2 - 0.15), (xa, yb - sw / 2 + 0.02, (z0 + z1) / 2 + 0.15), M["alu_grey"], c, bevel=0.003)
+    fbox("window_glass_s", ((xa + xb) / 2 - 0.004, ya + sw - 0.02, z0 + sw - 0.02), ((xa + xb) / 2 + 0.004, yb - sw + 0.02, z1 - sw + 0.02), M["glass"], c)
+    fbox("window_glass_n", ((fx0 + fx1) / 2 - 0.004, ym + fw / 2 - 0.02, z0 - 0.02), ((fx0 + fx1) / 2 + 0.004, wy1 - fw + 0.02, z1 + 0.02), M["glass"], c)
+    # recessed roller blind: cassette at the head of the reveal, fabric pulled down a little
+    fbox("blind_cassette", (x_in + 0.05, wy0 + 0.02, zl - 0.28), (x_in + 0.38, wy1 - 0.02, zl), M["plastic_white"], c, bevel=0.004)
+    fbox("blind_fabric", (x_in + 0.2, wy0 + 0.06, zl - 1.05), (x_in + 0.215, wy1 - 0.06, zl - 0.28), M["sheer"], c)
+    fbox("blind_bar", (x_in + 0.18, wy0 + 0.06, zl - 1.1), (x_in + 0.24, wy1 - 0.06, zl - 1.05), M["alu_grey"], c, bevel=0.002)
+    instance_on(A["potted_plant_04"], "sill_succulent", C["decor"], (x_in + 0.3, wy1 - 1.1), zs, rot_z_deg=15)
 
     # curtain rod + brackets + two sheer panels pulled to the sides
-    rod_x, rod_z = ROOM_W - 0.3, WINDOW_LINTEL + 0.55
+    rod_x, rod_z = ROOM_W - 0.3, WINDOW_LINTEL + 0.6
     ry0, ry1 = wy0 - 1.0, wy1 + 1.0
     bm = bmesh.new()
     L.bm_bar(bm, F(rod_x, ry0, rod_z), F(rod_x, ry1, rod_z), 0.011, segs=20)
@@ -513,26 +709,27 @@ def build_downlights():
 def build_desk():
     c = C["desk"]
     x0, x1, y0, y1 = DESK_X0, DESK_X1, DESK_Y0, ROOM_L - 0.04
-    fbox("desk_top", (x0, y0, DESK_H - DESK_TOP_T), (x1, y1, DESK_H), M["oak"], c, bevel=0.003, uv_rot=True)
-    leg = 2 / 12
-    for i, (lx, ly) in enumerate(((x0 + 0.15, y0 + 0.12), (x1 - 0.15 - leg, y0 + 0.12), (x0 + 0.15, y1 - 0.15 - leg), (x1 - 0.15 - leg, y1 - 0.15 - leg))):
-        fbox(f"desk_leg_{i}", (lx, ly, 0), (lx + leg, ly + leg, DESK_H - DESK_TOP_T), M["black_metal"], c, bevel=0.002)
-        fbox(f"desk_foot_{i}", (lx - 0.01, ly - 0.01, 0), (lx + leg + 0.01, ly + leg + 0.01, 0.02), M["rubber"], c)
-    rail = [((x0 + 0.15, y0 + 0.12, DESK_H - DESK_TOP_T - 2.5 / 12), (x1 - 0.15, y0 + 0.12 + 1 / 12, DESK_H - DESK_TOP_T)), ((x0 + 0.15, y1 - 0.15 - 1 / 12, DESK_H - DESK_TOP_T - 2.5 / 12), (x1 - 0.15, y1 - 0.15, DESK_H - DESK_TOP_T))]
-    for side in (x0 + 0.15, x1 - 0.15 - 1 / 12):
-        rail.append(((side, y0 + 0.12, DESK_H - DESK_TOP_T - 2.5 / 12), (side + 1 / 12, y1 - 0.15, DESK_H - DESK_TOP_T)))
-    for i, (p0, p1) in enumerate(rail):
-        fbox(f"desk_rail_{i}", p0, p1, M["black_metal"], c, bevel=0.002)
+    fbox("desk_top", (x0, y0, DESK_H - DESK_TOP_T), (x1, y1, DESK_H), M["oak"], c, bevel=0.008, segs=4, uv_rot=True)
+    # motorised standing-desk frame: two columns on T-feet, crossbeam, side brackets
+    ym = (y0 + y1) / 2
+    for i, cx in enumerate((x0 + 0.55, x1 - 0.55)):
+        fbox(f"desk_column_outer_{i}", (cx - 0.16, ym - 0.12, 0.1), (cx + 0.16, ym + 0.12, 1.25), M["black_metal"], c, bevel=0.004)
+        fbox(f"desk_column_inner_{i}", (cx - 0.13, ym - 0.095, 1.25), (cx + 0.13, ym + 0.095, DESK_H - DESK_TOP_T - 0.08), M["black_metal"], c, bevel=0.003)
+        fbox(f"desk_foot_{i}", (cx - 0.13, y0 + 0.2, 0.02), (cx + 0.13, y1 - 0.2, 0.12), M["black_metal"], c, bevel=0.006)
+        fbox(f"desk_bracket_{i}", (cx - 0.1, y0 + 0.25, DESK_H - DESK_TOP_T - 0.08), (cx + 0.1, y1 - 0.25, DESK_H - DESK_TOP_T), M["black_metal"], c, bevel=0.003)
+        for yy in (y0 + 0.22, y1 - 0.3):
+            fbox(f"desk_glide_{i}_{yy:.1f}", (cx - 0.06, yy, 0), (cx + 0.06, yy + 0.08, 0.02), M["rubber"], c)
+    fbox("desk_crossbeam", (x0 + 0.55, ym - 0.06, DESK_H - DESK_TOP_T - 0.28), (x1 - 0.55, ym + 0.06, DESK_H - DESK_TOP_T - 0.12), M["black_metal"], c, bevel=0.003)
+    fbox("desk_controller", (x1 - 1.1, y0 + 0.08, DESK_H - DESK_TOP_T - 0.08), (x1 - 0.55, y0 + 0.3, DESK_H - DESK_TOP_T), M["plastic_black"], c, bevel=0.003)
     # cable tray under the back edge
     fbox("cable_tray", (MON_CX - 1.8, y1 - 0.7, DESK_H - 0.55), (MON_CX + 1.8, y1 - 0.25, DESK_H - 0.5), M["black_metal"], c, bevel=0.002)
     fbox("cable_tray_lip", (MON_CX - 1.8, y1 - 0.7, DESK_H - 0.55), (MON_CX + 1.8, y1 - 0.68, DESK_H - 0.35), M["black_metal"], c)
 
-    build_pedestal()
     build_monitors()
     build_keyboard_mouse()
-    build_laptop()
     build_desk_items()
-    build_switchboard("switchboard_desk", (9.05, ROOM_L, 3.45), "north", kind="sockets")
+    build_switchboard("switchboard_desk", (DESK_X1 - 0.9, ROOM_L, 3.35), "north", kind="sockets")
+    build_ac_north()
 
 
 def build_pedestal():
@@ -674,12 +871,13 @@ def build_desk_items():
     c = C["desk"]
     z = DESK_H
     # desk lamp (rigged Poly Haven asset) at the back-left corner, head turned toward the desk
-    lamp, _ = append_rigged(fa.ph_model_blend("desk_lamp_arm_01"), "desk_lamp", c, F(3.05, ROOM_L - 0.6, z), -125)
-    L.cable("desk_lamp_cable", [F(3.05, ROOM_L - 0.45, z) + Vector((0, 0.02, 0.005)), F(3.1, ROOM_L - 0.15, z) + Vector((0, 0, 0.003)), F(3.2, ROOM_L - 0.05, z - 0.3), F(3.4, ROOM_L - 0.05, 0.3)], 0.0028, M["plastic_black"], c)
+    lamp, _ = append_rigged(fa.ph_model_blend("desk_lamp_arm_01"), "desk_lamp", c, F(DESK_X0 + 0.35, ROOM_L - 0.6, z), -125)
+    lx = DESK_X0 + 0.35
+    L.cable("desk_lamp_cable", [F(lx, ROOM_L - 0.45, z) + Vector((0, 0.02, 0.005)), F(lx + 0.05, ROOM_L - 0.15, z) + Vector((0, 0, 0.003)), F(lx + 0.15, ROOM_L - 0.05, z - 0.3), F(lx + 0.35, ROOM_L - 0.05, 0.3)], 0.0028, M["plastic_black"], c)
     # pencil cup with a few pens standing in it
     st = A["stationery"]
     cup = instance(st["stationery_supplies_pencilcup"], "pencil_cup", c, (0, 0, 0))
-    L.place_by_bbox(cup, Matrix.Identity(3), xc=F(3.95), yc=F(ROOM_L - 0.55), zmin=F(z))
+    L.place_by_bbox(cup, Matrix.Identity(3), xc=F(DESK_X0 + 0.95), yc=F(ROOM_L - 0.55), zmin=F(z))
     cc = cup.matrix_world.translation
     for i, key in enumerate(("stationery_supplies_pen_blue", "stationery_supplies_pencil_new_a", "stationery_supplies_pen_red", "stationery_supplies_pencil_new_b")):
         p = instance(st[key], f"pen_{i}", c, (0, 0, 0))
@@ -688,11 +886,11 @@ def build_desk_items():
         L.place_by_bbox(p, R, xc=cc.x + 0.012 * math.cos(a), yc=cc.y + 0.012 * math.sin(a), zmin=F(z) + 0.006)
     # notepad + pen
     pad = instance(A["notepads"]["office_notepads_yellow_pad"], "notepad", c, (0, 0, 0))
-    L.place_by_bbox(pad, Matrix.Rotation(math.radians(14), 3, "Z"), xc=F(4.45), yc=F(DESK_Y0 + 0.75), zmin=F(z))
+    L.place_by_bbox(pad, Matrix.Rotation(math.radians(14), 3, "Z"), xc=F(DESK_X0 + 0.75), yc=F(DESK_Y0 + 0.75), zmin=F(z))
     pen = instance(st["stationery_supplies_pen_fancy"], "desk_pen", c, (0, 0, 0))
-    L.place_by_bbox(pen, Matrix.Rotation(math.radians(70), 3, "Z"), xc=F(4.55), yc=F(DESK_Y0 + 0.78), zmin=F(z) + 0.01)
+    L.place_by_bbox(pen, Matrix.Rotation(math.radians(70), 3, "Z"), xc=F(DESK_X0 + 0.85), yc=F(DESK_Y0 + 0.78), zmin=F(z) + 0.01)
     # phone
-    g = L.empty("phone", c, loc=F(4.85, DESK_Y0 + 0.45, z), rot_z=math.radians(-18))
+    g = L.empty("phone", c, loc=F(DESK_X0 + 1.2, DESK_Y0 + 0.4, z), rot_z=math.radians(-18))
     L.box_obj("phone_body", (-0.036, -0.075, 0), (0.036, 0.075, 0.0082), M["phone"], c, parent=g, bevel=0.006, segs=5)
     L.box_obj("phone_camera", (-0.028, 0.035, -0.0006), (-0.006, 0.066, 0.0005), M["space_grey"], c, parent=g, bevel=0.002)
     # coffee mug
@@ -708,13 +906,10 @@ def build_desk_items():
     tor_ob = torus_handle("mug_handle", 0.026, 0.0055)
     L.parent_to(tor_ob, mug)
     tor_ob.location = (0.045, 0, 0.048)
-    mug.location = F(7.25, DESK_Y0 + 0.62, z)
+    mug.location = F(DESK_X1 - 0.75, DESK_Y0 + 0.6, z)
     mug.rotation_euler.z = math.radians(-35)
     # spectacles
-    instance_on(A["round_spectacles"], "spectacles", c, (7.75, DESK_Y0 + 1.25), z, rot_z_deg=160)
-    # wall clock on the slate wall above the monitors
-    clock = instance(A["wall_clock"], "wall_clock", c, (0, 0, 0))
-    L.place_by_bbox(clock, Matrix.Identity(3), xc=F(MON_CX), ymax=F(ROOM_L) - 0.002, zmin=F(7.0))
+    instance_on(A["round_spectacles"], "spectacles", c, (DESK_X1 - 0.55, DESK_Y0 + 1.15), z, rot_z_deg=160)
 
 
 def torus_handle(name, R, r):
@@ -1158,16 +1353,6 @@ def build_west_wall():
         L.bm_bar(bm, F(0.16, yy, z0 + 0.03), F(0.16, yy + 0.42, z0 + 0.03), 0.009)
         objs.append(L.mesh_obj(f"marker_{i}", bm, mat, c))
     objs.append(fbox("whiteboard_eraser", (0.05, wb["yc"] + 0.35, z0), (0.24, wb["yc"] + 0.8, z0 + 0.09), M["plastic_dark"], c, bevel=0.004))
-    # split AC
-    ac = AC
-    ay0, ay1 = ac["yc"] - ac["w"] / 2, ac["yc"] + ac["w"] / 2
-    az1 = ac["z_top"]
-    az0 = az1 - ac["h"]
-    objs.append(fbox("ac_body", (0, ay0, az0), (ac["d"], ay1, az1), M["plastic_white"], c, bevel=0.035, segs=5))
-    objs.append(fbox("ac_vent", (ac["d"] - 0.28, ay0 + 0.15, az0 - 0.002), (ac["d"] - 0.05, ay1 - 0.15, az0 + 0.02), M["plastic_dark"], c))
-    objs.append(fbox("ac_flap", (ac["d"] - 0.02, ay0 + 0.16, az0 + 0.02), (ac["d"] + 0.005, ay1 - 0.16, az0 + 0.2), M["plastic_white"], c, bevel=0.004))
-    objs.append(fbox("ac_display", (ac["d"], ac["yc"] + 0.75, az0 + 0.35), (ac["d"] + 0.004, ac["yc"] + 1.0, az0 + 0.42), M["phone"], c))
-    objs.append(fbox("ac_seam", (ac["d"] + 0.0005, ay0 + 0.03, az1 - 0.3), (ac["d"] + 0.002, ay1 - 0.03, az1 - 0.29), M["plastic_dark"], c))
     # drain/refrigerant pipe cover going up into the wall behind
     sb = build_switchboard("switchboard_entry", (0.0, 6.1, 4.0), "west", kind="lights")
     objs += [sb] + list(sb.children_recursive)
@@ -1253,6 +1438,162 @@ def dining_chair(name, xy_ft, yaw_deg):
 def build_plants():
     for name, (x, y, rz) in PLANTS.items():
         instance_on(A[name], name, C["decor"], (x, y), 0.0, rot_z_deg=rz, scale=1.0 if name == "potted_plant_01" else 1.1)
+
+
+def build_ac_north():
+    """Split AC high on the north wall (where the site points are), facing south."""
+    c = C["desk"]
+    ac = AC
+    x0, x1 = ac["xc"] - ac["w"] / 2, ac["xc"] + ac["w"] / 2
+    z1 = ac["z_top"]
+    z0 = z1 - ac["h"]
+    yb = ROOM_L - ac["d"]
+    fbox("ac_body", (x0, yb, z0), (x1, ROOM_L, z1), M["plastic_white"], c, bevel=0.035, segs=5)
+    fbox("ac_vent", (x0 + 0.15, yb + 0.05, z0 - 0.002), (x1 - 0.15, yb + 0.28, z0 + 0.02), M["plastic_dark"], c)
+    fbox("ac_flap", (x0 + 0.16, yb - 0.005, z0 + 0.02), (x1 - 0.16, yb + 0.02, z0 + 0.2), M["plastic_white"], c, bevel=0.004)
+    fbox("ac_display", (ac["xc"] + 0.75, yb - 0.004, z0 + 0.35), (ac["xc"] + 1.0, yb, z0 + 0.42), M["phone"], c)
+    fbox("ac_seam", (x0 + 0.03, yb - 0.002, z1 - 0.3), (x1 - 0.03, yb - 0.0005, z1 - 0.29), M["plastic_dark"], c)
+
+
+def pillow(name, w, h, t, mat, parent, loc, rot):
+    """Plump cushion: subdivided box pinched toward the edges."""
+    bm = bmesh.new()
+    bmesh.ops.create_cube(bm, size=1.0)
+    bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=6, use_grid_fill=True)
+    for v in bm.verts:
+        ex = max(abs(v.co.x), abs(v.co.z)) * 2  # 0 centre .. 1 edge (x = width, z = height)
+        v.co.x *= w
+        v.co.z *= h
+        v.co.y *= t * (1.0 - 0.75 * ex ** 3)
+    ob = L.mesh_obj(name, bm, mat, C["backdrop"], parent=parent, subsurf=2, smooth_all=True)
+    ob.location = loc
+    ob.rotation_euler = rot
+    return ob
+
+
+def leaning_frame(name, image_mat, xc, w, h, z, y_front, lean_deg, frame_mat):
+    """Framed print leaning on the ledge against the wall (feet)."""
+    c = C["backdrop"]
+    g = L.empty(name, c, loc=F(xc, y_front, z), rot=(math.radians(-lean_deg), 0, 0))
+    W, H = F(w), F(h)
+    fw, fd = 0.028, 0.02
+    for i, (p0, p1) in enumerate((((-W / 2, -fd, 0), (W / 2, 0, fw)), ((-W / 2, -fd, H - fw), (W / 2, 0, H)), ((-W / 2, -fd, 0), (-W / 2 + fw, 0, H)), ((W / 2 - fw, -fd, 0), (W / 2, 0, H)))):
+        L.box_obj(f"{name}_frame_{i}", p0, p1, frame_mat, c, parent=g, bevel=0.0015)
+    L.box_obj(f"{name}_mat", (-W / 2 + fw, -fd + 0.004, fw), (W / 2 - fw, -0.002, H - fw), M["paper"], c, parent=g)
+    m = min(W, H) * 0.09
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new()
+    yy = -0.0012
+    vs = [bm.verts.new(p) for p in ((-W / 2 + fw + m, yy, fw + m), (W / 2 - fw - m, yy, fw + m), (W / 2 - fw - m, yy, H - fw - m), (-W / 2 + fw + m, yy, H - fw - m))]
+    f = bm.faces.new(vs)
+    for loop, t in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))):
+        loop[uv].uv = t
+    L.mesh_obj(f"{name}_print", bm, image_mat, c, parent=g, uv=False)
+    return g
+
+
+def build_backdrop():
+    """South wall = video-call backdrop: boucle sofa-bed, cushions, throw, oak ledge with art, neon arch, floor lamp."""
+    c = C["backdrop"]
+    sf = SOFA
+    W, D = F(sf["w"]), F(sf["d"])
+    g = L.empty("sofa_bed", c, loc=F(sf["xc"], 0.08, 0))
+    arm = 0.17
+    L.box_obj("sofa_plinth", (-W / 2 + 0.03, 0.04, 0.11), (W / 2 - 0.03, D - 0.04, 0.3), M["boucle"], c, parent=g, bevel=0.03, segs=4)
+    bm = bmesh.new()
+    for sx in (-1, 1):
+        for yy in (0.1, D - 0.1):
+            L.bm_cyl(bm, 0.018, 0.12, loc=(sx * (W / 2 - 0.1), yy, 0.0), r2=0.024, segs=20)
+    L.mesh_obj("sofa_legs", bm, M["oak"], c, parent=g)
+    for sx in (-1, 1):
+        L.box_obj(f"sofa_arm_{sx}", (min(sx * (W / 2 - arm), sx * W / 2), 0.0, 0.11), (max(sx * (W / 2 - arm), sx * W / 2), D, 0.62), M["boucle"], c, parent=g, bevel=0.07, segs=5)
+    L.box_obj("sofa_back", (-W / 2 + arm - 0.01, 0.0, 0.28), (W / 2 - arm + 0.01, 0.2, 0.7), M["boucle"], c, parent=g, bevel=0.06, segs=5)
+    inner = W - 2 * arm
+    for i in range(2):
+        xa = -inner / 2 + i * inner / 2 + 0.004
+        xb = xa + inner / 2 - 0.008
+        L.box_obj(f"sofa_seat_{i}", (xa, 0.2, 0.3), (xb, D - 0.005, 0.47), M["boucle"], c, parent=g, bevel=0.055, segs=5, subsurf=1)
+        bc = L.box_obj(f"sofa_back_cushion_{i}", (xa - (xa + xb) / 2, -0.1, 0.0), (xb - (xa + xb) / 2, 0.1, 0.42), M["boucle"], c, parent=g, bevel=0.07, segs=5, subsurf=1)
+        bc.location = ((xa + xb) / 2, 0.3, 0.46)
+        bc.rotation_euler = (math.radians(-12), 0, 0)
+    # throw pillows leaning on the back cushions
+    pillow("pillow_olive", 0.46, 0.46, 0.17, M["velvet_olive"], g, (-inner / 2 + 0.3, 0.47, 0.68), (math.radians(-16), 0, math.radians(8)))
+    pillow("pillow_rust", 0.44, 0.44, 0.16, M["linen_rust"], g, (inner / 2 - 0.3, 0.47, 0.67), (math.radians(-18), 0, math.radians(-10)))
+    pillow("pillow_ochre", 0.5, 0.3, 0.13, M["linen_ochre"], g, (inner / 2 - 0.62, 0.52, 0.6), (math.radians(-22), 0, math.radians(-4)))
+    # folded knit throw over the right arm
+    tx = W / 2 - arm / 2
+    L.box_obj("throw_top", (tx - 0.13, 0.3, 0.62), (tx + 0.13, 0.72, 0.66), M["knit_cream"], c, parent=g, bevel=0.015, segs=3)
+    L.box_obj("throw_side", (W / 2 - 0.005, 0.3, 0.2), (W / 2 + 0.035, 0.72, 0.66), M["knit_cream"], c, parent=g, bevel=0.015, segs=3)
+
+    # oak picture ledge with a lip
+    lg = LEDGE
+    fbox("ledge", (lg["x0"], 0, lg["z"]), (lg["x1"], lg["d"], lg["z"] + 0.1), M["oak"], c, bevel=0.002, uv_rot=True)
+    fbox("ledge_lip", (lg["x0"], lg["d"] - 0.05, lg["z"] + 0.1), (lg["x1"], lg["d"], lg["z"] + 0.17), M["oak"], c, bevel=0.0015, uv_rot=True)
+    top = lg["z"] + 0.1
+    leaning_frame("art_big", M["art"], lg["x0"] + 1.3, 2.0, 2.65, top, 0.26, 7, M["oak"])
+    leaning_frame("art_small", M["art2"], lg["x0"] + 2.75, 1.45, 1.9, top, 0.36, 6, M["black_metal"])
+    # books + small objects on the ledge
+    books = [b for b in A["books"] if "hardcover" in b.name][:4]
+    zz = F(top)
+    lay = Matrix.Rotation(math.radians(90), 3, "Y") @ Matrix.Rotation(math.pi, 3, "Z")
+    for k, b in enumerate(books):
+        ob = b.copy()
+        ob.name = f"ledge_book_{k}"
+        c.objects.link(ob)
+        ext = L.place_by_bbox(ob, Matrix.Rotation(0.05 * (k - 1.5), 3, "Z") @ lay, xc=F(lg["x0"] + 4.15), yc=F(0.21), zmin=zz)
+        zz += ext.z
+    ob = A["brass_vase_03"].copy()
+    c.objects.link(ob)
+    L.place_by_bbox(ob, Matrix.Identity(3), xc=F(lg["x0"] + 4.15), yc=F(0.21), zmin=zz)
+    instance_on(A["ceramic_vase_01"], "ledge_vase", c, (lg["x0"] + 4.85, 0.2), top, scale=0.62)
+    instance_on(A["carved_wooden_elephant"], "ledge_elephant", c, (lg["x0"] + 3.55, 0.25), top, rot_z_deg=200, scale=1.3)
+
+    # warm neon arch on the wall (the playful bit)
+    n = NEON
+    cu = bpy.data.curves.new("neon_arch", "CURVE")
+    cu.dimensions = "3D"
+    cu.bevel_depth = 0.0055
+    cu.bevel_resolution = 4
+    for rr in (n["r"], n["r"] * 0.62):
+        sp = cu.splines.new("POLY")
+        pts = [(F(n["xc"]) + rr * math.cos(a), 0.03, F(n["z"]) + rr * math.sin(a)) for a in np.linspace(0, math.pi, 40)]
+        sp.points.add(len(pts) - 1)
+        for pnt, co in zip(sp.points, pts):
+            pnt.co = (*co, 1)
+    sp = cu.splines.new("POLY")
+    sun = [(F(n["xc"]) + 0.05 * math.cos(a), 0.03, F(n["z"]) + 0.05 * math.sin(a) + 0.02) for a in np.linspace(0, 2 * math.pi, 24)]
+    sp.points.add(len(sun) - 1)
+    for pnt, co in zip(sp.points, sun):
+        pnt.co = (*co, 1)
+    sp.use_cyclic_u = True
+    cu.materials.append(M["neon"])
+    neon = bpy.data.objects.new("neon_arch", cu)
+    c.objects.link(neon)
+
+    # tripod floor lamp with a linen drum shade
+    lx, ly = FLOOR_LAMP
+    base = F(lx, ly, 0)
+    apex = base + Vector((0, 0, 1.3))
+    bm = bmesh.new()
+    for k in range(3):
+        a = math.radians(90 + 120 * k)
+        foot = base + Vector((0.28 * math.cos(a), 0.28 * math.sin(a), 0))
+        L.bm_bar(bm, foot, apex, 0.012, segs=12)
+    L.mesh_obj("lamp_legs", bm, M["oak"], c)
+    bm = bmesh.new()
+    L.bm_cyl(bm, 0.006, 0.12, loc=apex, segs=12)
+    L.mesh_obj("lamp_stem", bm, M["brass"], c)
+    bm = bmesh.new()
+    L.bm_lathe(bm, [(0.225, 0.0), (0.2, 0.34), (0.197, 0.34), (0.222, 0.0)], segs=64)
+    shade = L.mesh_obj("lamp_shade", bm, M["shade"], c, uv=False)
+    shade.location = apex + Vector((0, 0, 0.05))
+    lt = bpy.data.lights.new("floor_lamp_bulb", "POINT")
+    lt.energy = LAMP_W
+    lt.color = kelvin(2700)
+    lt.shadow_soft_size = 0.05
+    lo = bpy.data.objects.new("floor_lamp_bulb", lt)
+    lo.location = apex + Vector((0, 0, 0.2))
+    C["lights"].objects.link(lo)
 
 
 # =============================================================================
@@ -1452,7 +1793,7 @@ def build_scene():
     t0 = time.time()
     fa.fetch_all()
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    for n in ("arch", "desk", "chairs", "storage", "decor", "table", "west", "lights", "cameras"):
+    for n in ("arch", "desk", "chairs", "backdrop", "decor", "west", "lights", "cameras"):
         C[n] = L.collection(n)
     C["protos"] = L.collection("_protos")
     build_materials()
@@ -1461,11 +1802,10 @@ def build_scene():
     build_desk()
     for name, xy, yaw in OFFICE_CHAIRS:
         office_chair(name, xy, yaw)
-    build_storage()
-    build_table_zone()
     build_west_wall()
     build_plants()
     build_art()
+    build_backdrop()
     build_world()
     for key, v in VIEWS.items():
         make_camera(f"cam_{key}", v)
