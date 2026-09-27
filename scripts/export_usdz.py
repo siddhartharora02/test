@@ -109,6 +109,73 @@ def simplify_materials():
                 nt.links.new(img.outputs["Color"], bc)
 
 
+BIG_TEX = ("floor", "oak", "teak", "wall", "ceiling", "rug", "screen", "art", "whiteboard", "chair_fabric", "fabric_oat")
+
+
+def lighten(tex_dir, max_tris=700):
+    """Make the model phone-friendly: fewer triangles, small JPEG textures, no EXR."""
+    objs = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+    for o in objs:
+        for m in o.modifiers:
+            if m.type == "BEVEL":
+                m.segments = 1
+    dg = bpy.context.evaluated_depsgraph_get()
+    for o in objs:
+        t = len(o.evaluated_get(dg).data.loop_triangles)
+        if t > max_tris:
+            d = o.modifiers.new("Decimate", "DECIMATE")
+            d.ratio = max(0.12 if "plant" in o.name else 0.05, max_tris / t)
+    # materials: keep detail maps only on the big surfaces, flatten the rest
+    for m in bpy.data.materials:
+        if not m.node_tree:
+            continue
+        b = _principled(m.node_tree)
+        if b is None or m.name.startswith(BIG_TEX):
+            continue
+        for key, default in (("Normal", None), ("Roughness", 0.55)):
+            s = b.inputs[key]
+            if s.is_linked:
+                m.node_tree.links.remove(s.links[0])
+                if default is not None:
+                    s.default_value = default
+    # re-save every used texture as a small JPEG (PNG when it carries alpha)
+    os.makedirs(tex_dir, exist_ok=True)
+    done = {}
+    for m in bpy.data.materials:
+        if not m.node_tree:
+            continue
+        b = _principled(m.node_tree)
+        alpha_imgs = set()
+        if b is not None and b.inputs["Alpha"].is_linked:
+            img_node = _upstream_image(b.inputs["Alpha"])
+            if img_node:
+                alpha_imgs.add(img_node.image)
+        for n in m.node_tree.nodes:
+            if n.bl_idname != "ShaderNodeTexImage" or n.image is None or not n.outputs["Color"].is_linked and not n.outputs["Alpha"].is_linked:
+                continue
+            img = n.image
+            if img.name in done:
+                n.image = done[img.name]
+                continue
+            size = 1024 if m.name.startswith(BIG_TEX) else (256 if "cover" in m.name or "book" in m.name else 512)
+            is_png = img in alpha_imgs or n.outputs["Alpha"].is_linked
+            w, h = img.size
+            if w == 0:
+                continue
+            s = min(1.0, size / max(w, h))
+            tmp = img.copy()
+            tmp.scale(max(1, int(w * s)), max(1, int(h * s)))
+            path = os.path.join(tex_dir, bpy.path.clean_name(img.name) + (".png" if is_png else ".jpg"))
+            tmp.filepath_raw = path
+            tmp.file_format = "PNG" if is_png else "JPEG"
+            tmp.save()
+            new = bpy.data.images.load(path)
+            new.colorspace_settings.name = img.colorspace_settings.name
+            done[img.name] = new
+            n.image = new
+    print(f"[usdz] re-saved {len(done)} textures")
+
+
 def curves_to_meshes():
     curves = [o for o in bpy.context.scene.objects if o.type == "CURVE"]
     if not curves:
@@ -124,6 +191,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(S.REPO, "exports", "office.usdz"))
     ap.add_argument("--tex", default="1024", choices=["256", "512", "1024", "2048", "KEEP"])
+    ap.add_argument("--lite", action="store_true", help="phone-friendly: decimated meshes, small JPEG textures")
     args = ap.parse_args(argv)
 
     S.build_scene()
@@ -137,6 +205,9 @@ def main():
                 bpy.data.objects.remove(o)
     curves_to_meshes()
     simplify_materials()
+    if args.lite:
+        lighten(os.path.join(os.path.dirname(os.path.abspath(args.out)), "_lite_textures"))
+        args.tex = "KEEP"
 
     keep = [o for o in bpy.context.scene.objects if o.type in ("MESH", "EMPTY", "ARMATURE") and not o.hide_render]
     for o in bpy.context.scene.objects:
