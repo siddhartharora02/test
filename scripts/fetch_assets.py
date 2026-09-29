@@ -65,6 +65,7 @@ ACG_TEXTURES = {
     "Metal032": "2K",  # brushed metal
     "Fabric031": "2K",  # office chair upholstery
     "Marble012": "2K",  # white marble-look floor slabs (800x2400 stoneware)
+    "Marble016": "2K",  # dark Nero-Marquina-look stone (lobby TV wall option)
 }
 
 

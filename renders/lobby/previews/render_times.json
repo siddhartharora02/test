@@ -1,0 +1,14 @@
+{
+  "oak": {
+    "seconds": 28.1,
+    "quality": "preview"
+  },
+  "fluted": {
+    "seconds": 21.8,
+    "quality": "preview"
+  },
+  "stone": {
+    "seconds": 22.7,
+    "quality": "preview"
+  }
+}
