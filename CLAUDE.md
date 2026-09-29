@@ -47,6 +47,9 @@ sofa backdrop = video-call view), `cutaway` (high 3/4 view, ceiling + south & we
 
 ## Workflow rules
 
+- **Never run Blender (previews, finals, exports) unless the owner explicitly asks for Blender.**
+  Default to cheap 2D visuals first (e.g. `python3 scripts/lobby_elevations.py`, PIL/SVG drawings,
+  plain-language design notes). Only move to Blender after the owner picks an option and asks for it.
 - All dimensions live in the CONFIG block at the top of `office_scene.py`, **in feet**.
 - Always render previews first, look at them, fix problems, then run finals.
 - Long renders go in the background with `nohup` and get polled (tool calls time out).
