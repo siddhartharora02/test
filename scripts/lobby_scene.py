@@ -61,7 +61,7 @@ def build_materials_lobby():
     M["greige"] = L.simple_mat("greige_lacquer", srgb("#CFC8BD"), rough=0.35, coat=0.1)
     M["tv_screen"] = L.simple_mat("tv_off", srgb("#050506"), rough=0.06, coat=1.0, coat_rough=0.02)
     M["lobby_wall"] = L.pbr_mat("lobby_wall", acg["PaintedPlaster017"], size=2.2, color=srgb("#EEEAE3"), color_var=0.07, rough=(0.72, 0.9), normal=0.18)
-    M["door_white"] = L.simple_mat("door_white", srgb("#F1EEE8"), rough=0.35, coat=0.1)
+    M["door_white"] = M["walnut"]  # doors and frames are walnut (owner, Sep 2026)
     M["led_warm"] = L.simple_mat("led_warm", (1, 1, 1, 1), rough=0.4, emission=(*kelvin(2700), 1), emission_strength=10.0)
 
 
