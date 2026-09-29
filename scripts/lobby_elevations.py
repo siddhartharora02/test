@@ -235,20 +235,178 @@ def design_stone():
     return img
 
 
+def walnut_console(d, x0, x1, z0=0.75, z1=1.6, joints=3, fluted=False):
+    rect(d, x0, z0, x1, z1, C["walnut"], outline=C["walnut_dark"], w=2)
+    if fluted:
+        x = x0 + 0.06
+        while x < x1 - 0.03:
+            d.line([X(x), Z(z1 - 0.03), X(x), Z(z0 + 0.03)], fill=C["walnut_dark"], width=2)
+            x += 1.5 / 12
+    else:
+        for k in range(1, joints + 1):
+            xx = x0 + k * (x1 - x0) / (joints + 1)
+            d.line([X(xx), Z(z1 - 0.03), X(xx), Z(z0 + 0.03)], fill=C["walnut_dark"], width=2)
+
+
+def design_frame():
+    img, d = base("4. Walnut frame wall", "A 3.5\" walnut border outlines a limewash panel behind the TV; matching walnut floating console, echoing the door frames")
+    f0, f1 = TV_YC - 3.6, TV_YC + 3.6
+    rect(d, f0, 0.35, f1, 8.2, C["walnut"])
+    rect(d, f0 + 0.29, 0.35, f1 - 0.29, 8.2 - 0.29, "#D8CFC2")
+    glow(img, (f0 + 0.3, 6.6, f1 - 0.3, 7.9), C["led"], radius=35, strength=80)
+    d = ImageDraw.Draw(img)
+    walnut_console(d, f0 + 0.6, f1 - 0.6, 0.85, 1.7)
+    tv(d, 4.1)
+    top = books(d, f0 + 1.4, 1.7)
+    vase(d, f0 + 1.4, top, 0.6, 0.26, C["brass"])
+    vase(d, f1 - 1.4, 1.7, 1.0, 0.5, C["white"])
+    plant(d, TV_WALL - 1.2, 0.0, 2.5)
+    dim_h(d, f0, f1, 8.55, "7'-2\" walnut frame, 3.5\" border")
+    return img
+
+
+def design_fluted_wrap():
+    img, d = base("5. Fluted walnut that wraps the console", "One continuous piece: fluting runs down behind the TV and carries on along the floating console front")
+    p0, p1 = TV_YC - 2.25, TV_YC + 2.25
+    rect(d, p0, 1.6, p1, WALL_H - 0.08, C["walnut"])
+    x = p0
+    while x < p1:
+        d.line([X(x), Z(WALL_H - 0.1), X(x), Z(1.62)], fill=C["walnut_dark"], width=2)
+        x += 1.5 / 12
+    c0, c1 = TV_YC - 4.0, TV_YC + 4.0
+    walnut_console(d, c0, c1, 0.75, 1.6, fluted=True)
+    rect(d, c0, 1.6, c1, 1.66, C["walnut_dark"])
+    glow(img, (c0 + 0.2, 0.0, c1 - 0.2, 0.75), C["led"], radius=26, strength=140)
+    glow(img, (p0, 7.2, p1, WALL_H - 0.1), C["led"], radius=40, strength=90)
+    d = ImageDraw.Draw(img)
+    tv(d, 4.05)
+    vase(d, c1 - 0.8, 1.66, 1.1, 0.5, C["white"])
+    top = books(d, c0 + 0.9, 1.66)
+    vase(d, c0 + 0.9, top, 0.55, 0.26, C["brass"])
+    dim_h(d, p0, p1, WALL_H + 0.25, "4'-6\" fluted panel")
+    dim_h(d, c0, c1, -0.45, "8'-0\" fluted floating console", above=False)
+    return img
+
+
+def design_louvers():
+    img, d = base("6. Walnut louvred sliding shutters", "Slatted walnut shutters on a hidden top track slide across to hide the TV when it's off (shown half open)")
+    rect(d, 0.6, 8.0, TV_WALL - 0.6, 8.12, C["walnut_dark"])
+    walnut_console(d, TV_YC - 3.5, TV_YC + 3.5, 0.7, 1.4, joints=3)
+    tv(d, 3.95)
+    for x0 in (TV_YC - 3.9, TV_YC + 2.55):  # left shutter half covering the TV, right shutter parked
+        w = 3.1
+        rect(d, x0, 1.55, x0 + w, 8.0, "#7A5638", outline=C["walnut_dark"], w=2)
+        z = 1.7
+        while z < 7.9:
+            rect(d, x0 + 0.12, z, x0 + w - 0.12, z + 0.1, C["walnut_dark"])
+            z += 0.22
+    plant(d, 0.9, 0.0, 2.4)
+    dim_h(d, TV_YC - 3.9, TV_YC - 0.8, 8.5, "shutter 3'-1\"")
+    return img
+
+
+def design_stone_walnut():
+    img, d = base("7. Stone slab + walnut console", "Honed dark stone only behind the TV, long walnut floating console below with a warm under-glow")
+    s0, s1 = TV_YC - 2.6, TV_YC + 2.6
+    rect(d, s0, 2.0, s1, 7.6, C["stone"])
+    rnd = random.Random(7)
+    for _ in range(18):
+        x = rnd.uniform(s0, s1)
+        z = rnd.uniform(2.1, 7.5)
+        pts = [(X(x), Z(z))]
+        for _ in range(6):
+            x = min(max(x + rnd.uniform(-0.5, 0.5), s0), s1)
+            z = min(max(z + rnd.uniform(-0.5, 0.3), 2.05), 7.55)
+            pts.append((X(x), Z(z)))
+        d.line(pts, fill="#8C8C8E", width=1)
+    c0, c1 = TV_YC - 4.0, TV_YC + 4.0
+    glow(img, (c0 + 0.2, 0.0, c1 - 0.2, 0.75), C["led"], radius=26, strength=140)
+    d = ImageDraw.Draw(img)
+    walnut_console(d, c0, c1, 0.75, 1.6)
+    tv(d, 4.75)
+    vase(d, c0 + 0.8, 1.6, 1.1, 0.5, C["white"])
+    top = books(d, c1 - 1.0, 1.6)
+    vase(d, c1 - 1.0, top, 0.55, 0.26, C["brass"])
+    dim_h(d, s0, s1, 7.95, "5'-2\" x 5'-7\" stone")
+    dim_h(d, c0, c1, -0.45, "8'-0\" walnut console", above=False)
+    return img
+
+
+def design_tonal_niches():
+    img, d = base("8. Tone-on-tone wall with lit niches", "Whole wall in one warm greige; shallow recessed niches in the same colour, lit from inside; a plinth in the wall colour")
+    rect(d, 0, 0.33, TV_WALL, WALL_H - 0.08, "#D9D1C5")
+    rect(d, 0.4, 0, TV_WALL - 0.4, 0.55, "#CFC6B9", outline="#BDB3A5")
+
+    def arch(x0, x1, z0, z1):
+        r = (x1 - x0) / 2
+        glow(img, (x0, z0, x1, z1), C["led"], radius=18, strength=120)
+        dd = ImageDraw.Draw(img)
+        rect(dd, x0, z0, x1, z1 - r, "#C9BFB1")
+        dd.pieslice([X(x0), Z(z1), X(x1), Z(z1 - 2 * r)], 180, 360, fill="#C9BFB1")
+        return dd
+
+    d = arch(1.0, 2.6, 0.55, 6.4)
+    vase(d, 1.8, 0.55, 1.2, 0.55, C["white"])
+    rect(d, 1.1, 3.1, 2.5, 3.18, "#BDB3A5")
+    vase(d, 1.8, 3.18, 0.7, 0.3, C["brass"])
+    for z0 in (2.1, 4.0):
+        glow(img, (TV_WALL - 2.6, z0, TV_WALL - 1.0, z0 + 1.4), C["led"], radius=14, strength=120)
+        d = ImageDraw.Draw(img)
+        rect(d, TV_WALL - 2.6, z0, TV_WALL - 1.0, z0 + 1.4, "#C9BFB1")
+    books(d, TV_WALL - 1.8, 2.1, n=2)
+    plant(d, TV_WALL - 1.8, 4.0, 0.6, pot_w=0.5, pot_h=0.4)
+    tv(d, 4.2)
+    dim_h(d, 1.0, 2.6, 6.8, "arched niche 1'-7\"")
+    dim_v(d, -1.4, 0, 0.55, "plinth")
+    return img
+
+
+def design_ledge():
+    img, d = base("9. Floating walnut ledge only", "No cabinet: one 12\"-deep walnut shelf, TV above, cables in a concealed box; the most minimal option")
+    l0, l1 = TV_YC - 3.0, TV_YC + 3.0
+    rect(d, l0, 1.45, l1, 1.62, C["walnut"], outline=C["walnut_dark"])
+    tv(d, 3.95)
+    rect(d, TV_YC - 1.4, 1.62, TV_YC + 1.4, 1.84, "#1C1C1D")
+    vase(d, l1 - 0.7, 1.62, 1.2, 0.5, C["white"])
+    top = books(d, l0 + 0.8, 1.62, n=2)
+    vase(d, l0 + 0.8, top, 0.55, 0.26, C["brass"])
+    plant(d, TV_WALL - 1.2, 0.0, 3.0)
+    d.text((X(TV_YC - 1.3), Z(0.9)), "concealed wire box", fill="#999999", font=font(14))
+    dim_h(d, l0, l1, -0.45, "6'-0\" ledge, 12\" deep", above=False)
+    return img
+
+
+def sheet(imgs, name, cols):
+    w, h = imgs[0].size
+    rows = (len(imgs) + cols - 1) // cols
+    out = Image.new("RGB", (w * cols, h * rows), "white")
+    for i, im in enumerate(imgs):
+        out.paste(im, ((i % cols) * w, (i // cols) * h))
+    out.save(os.path.join(OUT, name))
+    print("wrote", name)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
+    designs = [
+        ("lobby_elev_01_floating_oak.png", design_oak),
+        ("lobby_elev_02_fluted_panel.png", design_fluted),
+        ("lobby_elev_03_stone_slab.png", design_stone),
+        ("lobby_elev_04_walnut_frame.png", design_frame),
+        ("lobby_elev_05_fluted_wrap.png", design_fluted_wrap),
+        ("lobby_elev_06_louvred_shutters.png", design_louvers),
+        ("lobby_elev_07_stone_walnut.png", design_stone_walnut),
+        ("lobby_elev_08_tonal_niches.png", design_tonal_niches),
+        ("lobby_elev_09_walnut_ledge.png", design_ledge),
+    ]
     imgs = []
-    for name, fn in (("lobby_elev_01_floating_oak.png", design_oak), ("lobby_elev_02_fluted_panel.png", design_fluted), ("lobby_elev_03_stone_slab.png", design_stone)):
+    for name, fn in designs:
         img = fn().convert("RGB")
         img.save(os.path.join(OUT, name))
         imgs.append(img)
         print("wrote", name)
-    w, h = imgs[0].size
-    sheet = Image.new("RGB", (w, h * 3), "white")
-    for i, im in enumerate(imgs):
-        sheet.paste(im, (0, i * h))
-    sheet.save(os.path.join(OUT, "lobby_elevations_all.png"))
-    print("wrote lobby_elevations_all.png")
+    sheet(imgs[:3], "lobby_elevations_all.png", 1)
+    sheet(imgs[3:], "lobby_elevations_pinterest.png", 2)
 
 
 if __name__ == "__main__":
