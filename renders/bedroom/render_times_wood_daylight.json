@@ -1,0 +1,14 @@
+{
+  "corner": {
+    "seconds": 414.4,
+    "quality": "final"
+  },
+  "south": {
+    "seconds": 284.6,
+    "quality": "final"
+  },
+  "bed": {
+    "seconds": 362.6,
+    "quality": "final"
+  }
+}
