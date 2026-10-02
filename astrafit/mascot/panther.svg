@@ -1,128 +1,71 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <!-- AstraFit panther mascot v2: flat, outline-free, chunky shapes with hard-edged shade shapes
-       (achievement-badge style). Render with render_mascot.py. -->
+  <!-- AstraFit panther mascot v3: soft geometric flat style (no outlines, no gradients),
+       3 fur tones + light face band / belly, big round eyes. Render with render_mascot.py. -->
   <defs>
-    <path id="head" d="M512 168 C630 168 712 196 724 290 C736 380 744 470 712 532 C680 590 600 606 512 606 C424 606 344 590 312 532 C280 470 288 380 300 290 C312 196 394 168 512 168 Z"/>
+    <path id="head" d="M512 214 C604 214 664 244 694 296 L762 404 C772 422 764 438 748 444 C698 474 618 500 512 500 C406 500 326 474 276 444 C260 438 252 422 262 404 L330 296 C360 244 420 214 512 214 Z"/>
     <clipPath id="headClip"><use href="#head"/></clipPath>
-    <path id="body" d="M404 572 C380 640 368 724 382 800 C392 852 440 874 512 874 C584 874 632 852 642 800 C656 724 644 640 620 572 Z"/>
-    <clipPath id="bodyClip"><use href="#body"/></clipPath>
-    <path id="ear" d="M316 312 C296 226 314 148 352 134 C394 120 436 158 456 204 Z"/>
-    <path id="earInner" d="M340 270 C330 214 344 178 366 172 C392 166 416 192 428 218 Z"/>
-    <ellipse id="eyeL" cx="430" cy="404" rx="60" ry="54"/>
-    <ellipse id="eyeR" cx="594" cy="404" rx="60" ry="54"/>
-    <clipPath id="eyeLClip"><use href="#eyeL"/></clipPath>
-    <clipPath id="eyeRClip"><use href="#eyeR"/></clipPath>
-    <path id="upperArm" d="M606 612 C672 586 764 596 806 640 C836 672 816 716 772 718 C700 722 640 716 606 704 Z"/>
-    <path id="forearm" d="M756 698 C736 626 740 552 756 508 L852 508 C864 566 854 646 834 704 Z"/>
-    <clipPath id="armClip"><use href="#upperArm"/><use href="#forearm"/></clipPath>
-    <path id="mouth" d="M444 506 Q512 524 580 506 Q572 580 512 584 Q452 580 444 506 Z"/>
-    <clipPath id="fistClip"><rect x="742" y="398" width="132" height="124" rx="48"/></clipPath>
-    <clipPath id="mouthClip"><use href="#mouth"/></clipPath>
+    <path id="earL" d="M292 330 C276 262 290 200 326 186 C364 172 428 210 456 236 Z"/>
+    <path id="earInnerL" d="M318 296 C308 252 318 220 338 214 C362 208 402 232 422 248 Z"/>
   </defs>
 
-  <!-- tail -->
-  <path d="M446 856 C304 900 214 832 232 726 C242 664 270 636 258 590" fill="none" stroke="#383660" stroke-width="46" stroke-linecap="round"/>
-
-  <!-- headband knot + tails (behind the head, left side) -->
-  <path d="M312 318 C262 300 222 318 186 300 L196 352 C232 366 270 352 312 360 Z" fill="#5E3FE0"/>
-  <path d="M312 348 C262 360 236 396 200 400 L222 440 C258 432 282 396 318 380 Z" fill="#6A4BF0"/>
+  <!-- tail (behind, left) -->
+  <path d="M440 806 C296 842 222 772 234 668 C242 604 284 586 266 530" fill="none" stroke="#2C2959" stroke-width="54" stroke-linecap="round"/>
 
   <!-- legs + feet -->
-  <rect x="418" y="820" width="84" height="80" rx="30" fill="#383660"/>
-  <rect x="522" y="820" width="84" height="80" rx="30" fill="#383660"/>
-  <ellipse cx="452" cy="900" rx="74" ry="36" fill="#4B4878"/>
-  <ellipse cx="572" cy="900" rx="74" ry="36" fill="#423F6E"/>
-  <path d="M430 892 L430 914 M456 894 L456 918 M550 894 L550 918 M576 892 L576 914" stroke="#2C2A4C" stroke-width="7" stroke-linecap="round"/>
+  <rect x="430" y="760" width="74" height="120" rx="20" fill="#3B3870"/>
+  <rect x="520" y="760" width="74" height="120" rx="20" fill="#3B3870"/>
+  <rect x="418" y="846" width="94" height="50" rx="25" fill="#3B3870"/>
+  <rect x="512" y="846" width="94" height="50" rx="25" fill="#3B3870"/>
 
-  <!-- body -->
-  <use href="#body" fill="#4B4878"/>
-  <g clip-path="url(#bodyClip)">
-    <path d="M590 560 C640 660 640 790 570 880 L700 880 L700 560 Z" fill="#383660"/>
-    <path d="M462 626 Q512 612 562 626 Q578 700 550 770 L512 744 L474 770 Q446 700 462 626 Z" fill="#6B67A3"/>
-    <g fill="#383660"><circle cx="420" cy="720" r="9"/><circle cx="436" cy="704" r="7"/><circle cx="434" cy="736" r="6"/>
-      <circle cx="414" cy="812" r="8"/><circle cx="428" cy="798" r="6"/></g>
-    <ellipse cx="512" cy="598" rx="150" ry="22" fill="#2C2A4C" opacity="0.6"/>
-  </g>
+  <!-- body + belly -->
+  <path d="M512 456 C622 456 664 552 656 656 C648 762 604 820 512 820 C420 820 376 762 368 656 C360 552 402 456 512 456 Z" fill="#4B4787"/>
+  <ellipse cx="512" cy="712" rx="78" ry="70" fill="#8580CC"/>
+  <g fill="#3F3B78"><circle cx="410" cy="612" r="10"/><circle cx="426" cy="630" r="7"/><circle cx="612" cy="780" r="9"/><circle cx="598" cy="764" r="6"/></g>
 
-  <!-- arm on hip (left) -->
-  <path d="M410 640 Q300 700 314 762 Q326 804 394 798" fill="none" stroke="#4B4878" stroke-width="72" stroke-linecap="round"/>
-  <path d="M330 742 Q326 790 380 800" fill="none" stroke="#383660" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
-  <circle cx="402" cy="796" r="40" fill="#5A568C"/>
-  <path d="M388 780 Q402 772 416 780" fill="none" stroke="#383660" stroke-width="7" stroke-linecap="round"/>
-
-  <!-- flexing arm (right): big bicep, forearm up, wristband, fist -->
-  <use href="#upperArm" fill="#4B4878"/>
-  <circle cx="700" cy="610" r="64" fill="#4B4878"/>
-  <use href="#forearm" fill="#4B4878"/>
-  <g clip-path="url(#armClip)">
-    <path d="M600 690 C680 704 760 704 860 680 L860 740 L600 740 Z" fill="#383660"/>
-    <path d="M820 500 C842 580 846 650 830 720 L880 720 L880 500 Z" fill="#383660"/>
-  </g>
-  <path d="M660 582 Q700 556 742 578" fill="none" stroke="#6B67A3" stroke-width="14" stroke-linecap="round"/>
-  <rect x="744" y="512" width="118" height="46" rx="16" fill="#7B5CFF"/>
-  <rect x="744" y="540" width="118" height="18" rx="9" fill="#5E3FE0"/>
-  <rect x="742" y="398" width="132" height="124" rx="48" fill="#5A568C"/>
-  <g clip-path="url(#fistClip)"><path d="M836 390 C870 420 874 480 856 530 L890 530 L890 390 Z" fill="#4B4878"/></g>
-  <path d="M770 440 Q790 430 810 440 M770 474 Q790 464 810 474" fill="none" stroke="#383660" stroke-width="9" stroke-linecap="round"/>
+  <!-- arm down (left) -->
+  <path d="M398 540 C378 600 350 652 330 690 C318 714 342 734 362 716 C388 690 414 644 436 598 Z" fill="#3B3870"/>
+  <circle cx="326" cy="704" r="20" fill="#3B3870"/><circle cx="344" cy="722" r="20" fill="#3B3870"/><circle cx="366" cy="716" r="18" fill="#3B3870"/>
 
   <!-- ears -->
-  <use href="#ear" fill="#4B4878"/>
-  <use href="#earInner" fill="#A58BFF"/>
+  <use href="#earL" fill="#4B4787"/>
+  <use href="#earInnerL" fill="#B9A6FF"/>
   <g transform="matrix(-1 0 0 1 1024 0)">
-    <use href="#ear" fill="#383660"/>
-    <use href="#earInner" fill="#8C70F0"/>
+    <use href="#earL" fill="#4B4787"/>
+    <use href="#earInnerL" fill="#B9A6FF"/>
   </g>
 
   <!-- head -->
-  <use href="#head" fill="#4B4878"/>
+  <use href="#head" fill="#4B4787"/>
   <g clip-path="url(#headClip)">
-    <path d="M642 160 C706 262 718 430 664 612 L760 612 L760 160 Z" fill="#383660"/>
-    <path d="M352 236 C372 206 416 190 470 188 C428 204 394 222 370 254 Z" fill="#6B67A3"/>
-    <!-- rosettes: little clusters of flat spots -->
-    <g fill="#383660"><circle cx="396" cy="250" r="9"/><circle cx="412" cy="236" r="7"/><circle cx="414" cy="262" r="6"/>
-      <circle cx="330" cy="450" r="9"/><circle cx="342" cy="432" r="6"/><circle cx="344" cy="468" r="6"/></g>
-    <g fill="#2C2A4C"><circle cx="640" cy="244" r="9"/><circle cx="624" cy="232" r="6"/><circle cx="694" cy="452" r="9"/><circle cx="680" cy="434" r="6"/></g>
-    <!-- headband -->
-    <path d="M280 302 Q512 248 744 302 L746 360 Q512 304 278 360 Z" fill="#7B5CFF"/>
-    <path d="M278 340 Q512 284 746 340 L746 360 Q512 304 278 360 Z" fill="#5E3FE0"/>
-    <path d="M300 300 Q512 254 724 300 L724 310 Q512 264 300 310 Z" fill="#9F88FF"/>
+    <!-- violet sweatband -->
+    <path d="M300 300 C410 262 614 262 724 300 L736 338 C614 300 410 300 288 338 Z" fill="#7B5CFF"/>
+    <!-- tiny gold star on the band -->
+    <path d="M512 262 L519.6 281 L540 282.4 L524.4 295.4 L529.3 315.2 L512 304.4 L494.7 315.2 L499.6 295.4 L484 282.4 L504.4 281 Z" fill="#FFC93C"/>
   </g>
-  <!-- star badge -->
-  <path d="M512 262 L524.3 292.6 L557 294.8 L532 315.6 L539.8 347.4 L512 330 L484.2 347.4 L492 315.6 L467 294.8 L499.7 292.6 Z" fill="#FFC93C"/>
-  <path d="M512 262 L524.3 292.6 L557 294.8 L532 315.6 L512 300 Z" fill="#FFE07A"/>
+  <!-- faint rosettes -->
+  <g fill="#3F3B78"><circle cx="372" cy="356" r="9"/><circle cx="356" cy="372" r="6"/><circle cx="652" cy="356" r="9"/><circle cx="668" cy="372" r="6"/></g>
+  <!-- light face band with a wavy bottom edge, flaring to cheek points -->
+  <path d="M262 404 C330 392 404 414 512 414 C620 414 694 392 762 404 C774 422 766 438 750 446 L766 470 C724 482 694 480 664 500 C624 528 574 518 512 540 C450 518 400 528 360 500 C330 480 300 482 258 470 L274 446 C258 438 250 422 262 404 Z" fill="#8580CC"/>
 
-  <!-- eyes: gold, big pupils, confident lids -->
-  <use href="#eyeL" fill="#FFC93C"/>
-  <use href="#eyeR" fill="#FFC93C"/>
-  <g clip-path="url(#eyeLClip)">
-    <ellipse cx="444" cy="420" rx="26" ry="32" fill="#1E1C30"/>
-    <circle cx="452" cy="406" r="10" fill="#FFFFFF"/>
-    <path d="M360 340 L500 340 L500 390 L360 372 Z" fill="#4B4878"/>
-    <path d="M360 372 L500 390" stroke="#2C2A4C" stroke-width="10"/>
-  </g>
-  <g clip-path="url(#eyeRClip)">
-    <ellipse cx="608" cy="420" rx="26" ry="32" fill="#1E1C30"/>
-    <circle cx="616" cy="406" r="10" fill="#FFFFFF"/>
-    <path d="M524 340 L664 340 L664 372 L524 390 Z" fill="#423F6E"/>
-    <path d="M524 390 L664 372" stroke="#2C2A4C" stroke-width="10"/>
-  </g>
-  <!-- brows -->
-  <path d="M376 352 L478 370" stroke="#1E1C30" stroke-width="20" stroke-linecap="round"/>
-  <path d="M546 370 L648 352" stroke="#1E1C30" stroke-width="20" stroke-linecap="round"/>
+  <!-- eyes: cream sclera, gold iris, dark pupil, two highlights -->
+  <circle cx="420" cy="396" r="62" fill="#FFFBF2"/>
+  <circle cx="604" cy="396" r="62" fill="#FFFBF2"/>
+  <ellipse cx="428" cy="402" rx="40" ry="48" fill="#FFC23C"/>
+  <ellipse cx="612" cy="402" rx="40" ry="48" fill="#FFC23C"/>
+  <ellipse cx="430" cy="406" rx="24" ry="32" fill="#2B1E3A"/>
+  <ellipse cx="614" cy="406" rx="24" ry="32" fill="#2B1E3A"/>
+  <circle cx="412" cy="382" r="13" fill="#FFFFFF"/><circle cx="596" cy="382" r="13" fill="#FFFFFF"/>
+  <circle cx="442" cy="428" r="6" fill="#FFFFFF"/><circle cx="626" cy="428" r="6" fill="#FFFFFF"/>
 
-  <!-- muzzle -->
-  <path d="M512 446 C574 434 646 462 648 516 C650 578 586 604 512 604 C438 604 374 578 376 516 C378 462 450 434 512 446 Z" fill="#8C86C6"/>
-  <path d="M600 448 C640 470 656 540 610 596 C640 590 652 560 650 516 C648 480 630 458 600 448 Z" fill="#7671B0"/>
-  <g fill="#4B4878"><circle cx="420" cy="512" r="5"/><circle cx="408" cy="530" r="5"/><circle cx="428" cy="540" r="5"/>
-    <circle cx="604" cy="512" r="5"/><circle cx="616" cy="530" r="5"/><circle cx="596" cy="540" r="5"/></g>
-  <!-- nose -->
-  <path d="M476 456 Q512 444 548 456 Q552 470 534 486 Q512 504 490 486 Q472 470 476 456 Z" fill="#1E1C30"/>
-  <ellipse cx="500" cy="460" rx="11" ry="5" fill="#FFFFFF" opacity="0.5"/>
-  <!-- open grin -->
-  <use href="#mouth" fill="#7A1E3A"/>
-  <g clip-path="url(#mouthClip)">
-    <path d="M466 566 Q512 540 558 566 L558 600 L466 600 Z" fill="#FF6B8B"/>
-    <path d="M440 500 Q512 520 584 500 L584 522 Q512 540 440 522 Z" fill="#FFFFFF"/>
-    <path d="M466 520 L482 520 L474 544 Z M542 520 L558 520 L550 544 Z" fill="#FFFFFF"/>
+  <!-- nose + open smile -->
+  <path d="M488 430 Q512 420 536 430 Q538 442 524 454 Q512 464 500 454 Q486 442 488 430 Z" fill="#2B1E3A"/>
+  <path d="M484 474 L540 474 Q540 512 512 514 Q484 512 484 474 Z" fill="#9E1C2B"/>
+  <path d="M492 500 Q512 486 532 500 Q526 513 512 514 Q498 513 492 500 Z" fill="#F2585B"/>
+  <!-- arm up (right): fist pump with a violet wristband, in front of the cheek -->
+  <g transform="translate(18 -16)">
+  <path d="M606 548 C670 566 744 580 782 552 C808 530 808 484 798 454 L748 462 C752 494 752 512 738 520 C708 530 660 520 618 506 Z" fill="#3B3870"/>
+  <rect x="744" y="462" width="72" height="34" rx="14" fill="#7B5CFF" transform="rotate(-10 780 479)"/>
+  <circle cx="778" cy="428" r="44" fill="#3B3870"/>
+  <path d="M756 414 Q772 404 788 414 M756 438 Q772 428 788 438" fill="none" stroke="#2C2959" stroke-width="7" stroke-linecap="round"/>
   </g>
 </svg>

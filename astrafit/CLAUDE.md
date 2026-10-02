@@ -17,12 +17,13 @@ mascot/
   render_mascot.py    # SVG -> panther_1024.png / panther_2048.png (transparent), needs `pip install cairosvg`
 ```
 
-## Mascot v2 — panther (current)
+## Mascot v3 — panther (current)
 
-Style follows the owner's reference (Duolingo-like achievement art): flat colours, **no outlines**,
-chunky rounded shapes, hard-edged shade shapes on the right side, big expressive eyes with heavy lids,
-open grin, exaggerated pose. v1 (outlined cartoon) is in git history.
-Chibi black panther flexing one arm, paw on hip. Palette: fur #4B4878 / shade #383660 / light #6B67A3,
-muzzle #8C86C6, pupils/brows/nose #1E1C30, eyes gold #FFC93C, AstraFit violet #7B5CFF (headband,
-wristband), inner ears #A58BFF, gold star #FFC93C, mouth #7A1E3A, tongue #FF6B8B.
-Fur stays violet-indigo (not black) so it reads on the app's dark background.
+Style follows the owner's reference: Dribbble "Fox App Mascot and Logo Design" (Manu) — soft geometric
+flat shapes, **no outlines, no gradients**, 3 tones of one fur hue (base / limbs+ears / tail), a lighter
+cheek band with a wavy bottom edge that flares to cheek points, lighter round belly patch, big round eyes
+(cream sclera, here a gold iris, dark pupil, one big + one small highlight), tiny nose, small open "D" mouth.
+v1 (outlined cartoon) and v2 (Duolingo-like) are in git history.
+Palette: fur #4B4787, limbs/legs #3B3870, tail/creases #2C2959, cheek band + belly #8580CC,
+rosette spots #3F3B78, inner ears #B9A6FF, AstraFit violet #7B5CFF (sweatband, wristband), star #FFC93C,
+sclera #FFFBF2, iris #FFC23C, pupils/nose #2B1E3A, mouth #9E1C2B, tongue #F2585B.
