@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- AstraFit panther mascot. Hand-authored vector: edit shapes here, render with render_mascot.py -->
+  <defs>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3A3555"/>
+      <stop offset="1" stop-color="#1D1A2E"/>
+    </linearGradient>
+    <linearGradient id="furBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E2A45"/>
+      <stop offset="1" stop-color="#1A1729"/>
+    </linearGradient>
+    <linearGradient id="muzzle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5E5788"/>
+      <stop offset="1" stop-color="#433D68"/>
+    </linearGradient>
+    <radialGradient id="iris" cx="0.45" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#FFF3A0"/>
+      <stop offset="0.55" stop-color="#FFD23F"/>
+      <stop offset="1" stop-color="#EE9F1C"/>
+    </radialGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9A80FF"/>
+      <stop offset="1" stop-color="#6544EE"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE68A"/>
+      <stop offset="1" stop-color="#F4B12A"/>
+    </linearGradient>
+    <path id="headShape" d="M512 210 C610 210 690 245 728 315 C758 370 768 420 762 470 L806 488 L764 518 L798 548 L744 562 C716 630 625 668 512 668 C399 668 308 630 280 562 L226 548 L260 518 L218 488 L262 470 C256 420 266 370 296 315 C334 245 414 210 512 210 Z"/>
+    <clipPath id="headClip"><use href="#headShape"/></clipPath>
+    <path id="bodyShape" d="M512 598 C602 598 646 662 646 742 C646 826 602 884 512 884 C422 884 378 826 378 742 C378 662 422 598 512 598 Z"/>
+    <clipPath id="bodyClip"><use href="#bodyShape"/></clipPath>
+    <path id="earL" d="M318 318 C306 246 322 182 356 170 C398 158 446 200 470 240 Z"/>
+    <path id="earInnerL" d="M342 292 C336 246 348 206 368 200 C394 194 422 224 436 250 Z"/>
+    <path id="eyeR" d="M546 454 C552 410 608 390 654 410 C654 452 604 482 546 454 Z"/>
+  </defs>
+
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <!-- ground shadow -->
+    <ellipse cx="512" cy="926" rx="236" ry="24" fill="#14111F" opacity="0.14"/>
+
+    <!-- tail (outline stroke, then fur stroke) -->
+    <path d="M440 858 C318 900 226 842 238 742 C246 676 292 650 300 600" fill="none" stroke="#14111F" stroke-width="60"/>
+    <path d="M440 858 C318 900 226 842 238 742 C246 676 292 650 300 600" fill="none" stroke="#24203A" stroke-width="42"/>
+
+    <!-- headband ribbon tails (behind the head) -->
+    <path d="M730 360 C786 336 828 350 868 326 L866 372 C832 392 790 384 736 396 Z" fill="url(#band)" stroke="#14111F" stroke-width="8"/>
+    <path d="M734 388 C788 398 822 428 856 424 L842 462 C806 462 778 434 730 414 Z" fill="url(#band)" stroke="#14111F" stroke-width="8"/>
+
+    <!-- legs + feet -->
+    <path d="M462 806 L458 866 M562 806 L566 866" stroke="#14111F" stroke-width="96"/>
+    <path d="M462 806 L458 866 M562 806 L566 866" stroke="#221E35" stroke-width="78"/>
+    <ellipse cx="452" cy="888" rx="70" ry="40" fill="#24203A" stroke="#14111F" stroke-width="9"/>
+    <ellipse cx="572" cy="888" rx="70" ry="40" fill="#24203A" stroke="#14111F" stroke-width="9"/>
+    <path d="M432 900 L432 918 M456 902 L456 922 M552 902 L552 922 M576 900 L576 918" stroke="#14111F" stroke-width="6"/>
+
+    <!-- body -->
+    <use href="#bodyShape" fill="url(#furBody)"/>
+    <g clip-path="url(#bodyClip)">
+      <path d="M452 636 Q512 616 572 636 Q596 716 566 792 L550 776 L534 802 L512 784 L490 802 L474 776 L458 792 Q428 716 452 636 Z" fill="#3B3659" opacity="0.85"/>
+      <g fill="none" stroke="#3A3556" stroke-width="7" opacity="0.7">
+        <circle cx="420" cy="720" r="15"/><circle cx="604" cy="700" r="13"/><circle cx="610" cy="800" r="11"/><circle cx="408" cy="812" r="12"/>
+      </g>
+      <ellipse cx="512" cy="642" rx="170" ry="34" fill="#0C0A14" opacity="0.35"/>
+    </g>
+    <use href="#bodyShape" fill="none" stroke="#14111F" stroke-width="9"/>
+
+    <!-- arm on hip (left of image) -->
+    <path d="M424 668 Q336 700 350 764 Q358 792 402 792" fill="none" stroke="#14111F" stroke-width="66"/>
+    <path d="M424 668 Q336 700 350 764 Q358 792 402 792" fill="none" stroke="#2A2641" stroke-width="48"/>
+    <circle cx="408" cy="790" r="31" fill="#2E2A47" stroke="#14111F" stroke-width="8"/>
+    <path d="M396 772 Q408 766 420 772 M394 790 Q406 784 418 790" fill="none" stroke="#14111F" stroke-width="5"/>
+
+    <!-- flexing arm (right of image): outlines first, then fills, so the bicep fuses with the arm -->
+    <path d="M598 668 Q700 704 792 690 Q834 646 818 588" fill="none" stroke="#14111F" stroke-width="72"/>
+    <circle cx="700" cy="668" r="50" fill="#14111F"/>
+    <circle cx="818" cy="566" r="56" fill="#14111F"/>
+    <path d="M598 668 Q700 704 792 690 Q834 646 818 588" fill="none" stroke="#2A2641" stroke-width="54"/>
+    <circle cx="700" cy="668" r="41" fill="#2E2A47"/>
+    <path d="M676 646 Q700 634 724 646" fill="none" stroke="#4A4470" stroke-width="7" opacity="0.8"/>
+    <circle cx="818" cy="566" r="47" fill="#2E2A47"/>
+    <path d="M776 552 Q792 542 808 552 M774 574 Q790 564 806 574 M782 594 Q794 586 806 594" fill="none" stroke="#14111F" stroke-width="6"/>
+    <!-- wristband -->
+    <g transform="rotate(-12 820 628)">
+      <rect x="778" y="610" width="84" height="34" rx="12" fill="url(#band)" stroke="#14111F" stroke-width="8"/>
+      <path d="M788 618 L852 618" stroke="#BBA9FF" stroke-width="5" opacity="0.8"/>
+    </g>
+
+    <!-- ears -->
+    <use href="#earL" fill="url(#fur)" stroke="#14111F" stroke-width="9"/>
+    <use href="#earInnerL" fill="#8064E0"/>
+    <g transform="matrix(-1 0 0 1 1024 0)">
+      <use href="#earL" fill="url(#fur)" stroke="#14111F" stroke-width="9"/>
+      <use href="#earInnerL" fill="#8064E0"/>
+    </g>
+
+    <!-- head -->
+    <use href="#headShape" fill="url(#fur)"/>
+    <g clip-path="url(#headClip)">
+      <!-- rim light, top-left -->
+      <path d="M318 352 C346 276 420 236 500 228" fill="none" stroke="#56507C" stroke-width="16" opacity="0.6"/>
+      <!-- faint black-panther rosettes -->
+      <g fill="none" stroke="#4A4469" stroke-width="7" opacity="0.55">
+        <circle cx="404" cy="268" r="14"/><circle cx="452" cy="244" r="9"/><circle cx="630" cy="262" r="13"/><circle cx="584" cy="246" r="8"/>
+        <circle cx="318" cy="446" r="15"/><circle cx="344" cy="400" r="9"/><circle cx="706" cy="446" r="15"/><circle cx="680" cy="400" r="9"/>
+        <circle cx="330" cy="560" r="11"/><circle cx="694" cy="560" r="11"/>
+      </g>
+      <!-- headband -->
+      <path d="M270 352 Q512 270 754 352 L760 400 Q512 318 264 400 Z" fill="url(#band)" stroke="#14111F" stroke-width="8"/>
+      <path d="M290 356 Q512 286 734 356" fill="none" stroke="#C3B4FF" stroke-width="6" opacity="0.75"/>
+    </g>
+    <use href="#headShape" fill="none" stroke="#14111F" stroke-width="10"/>
+
+    <!-- star badge -->
+    <path d="M512 290 L522.6 316.4 L550 318.3 L529 336 L535.5 362.7 L512 348 L488.5 362.7 L495 336 L474 318.3 L501.4 316.4 Z" fill="url(#gold)" stroke="#14111F" stroke-width="7"/>
+
+    <!-- cheeks -->
+    <ellipse cx="364" cy="532" rx="30" ry="15" fill="#8B6CFF" opacity="0.35"/>
+    <ellipse cx="660" cy="532" rx="30" ry="15" fill="#8B6CFF" opacity="0.35"/>
+
+    <!-- eyes (right drawn, left mirrored) -->
+    <g id="eyes">
+      <use href="#eyeR" fill="url(#iris)" stroke="#14111F" stroke-width="9"/>
+      <ellipse cx="601" cy="440" rx="16" ry="25" fill="#120F1C"/>
+      <path d="M534 412 Q592 368 660 386" fill="none" stroke="#14111F" stroke-width="14"/>
+      <g transform="matrix(-1 0 0 1 1024 0)">
+        <use href="#eyeR" fill="url(#iris)" stroke="#14111F" stroke-width="9"/>
+        <ellipse cx="601" cy="440" rx="16" ry="25" fill="#120F1C"/>
+        <path d="M534 412 Q592 368 660 386" fill="none" stroke="#14111F" stroke-width="14"/>
+      </g>
+      <!-- glints (same light direction on both eyes) -->
+      <circle cx="609" cy="428" r="7.5" fill="#FFFFFF"/><circle cx="594" cy="452" r="3.5" fill="#FFFFFF"/>
+      <circle cx="433" cy="428" r="7.5" fill="#FFFFFF"/><circle cx="418" cy="452" r="3.5" fill="#FFFFFF"/>
+    </g>
+
+    <!-- muzzle -->
+    <path d="M512 500 C552 478 618 488 626 540 C632 592 578 620 512 608 C446 620 392 592 398 540 C406 488 472 478 512 500 Z" fill="url(#muzzle)"/>
+    <g fill="#1F1B30">
+      <circle cx="452" cy="536" r="4.5"/><circle cx="436" cy="553" r="4.5"/><circle cx="458" cy="562" r="4.5"/>
+      <circle cx="572" cy="536" r="4.5"/><circle cx="588" cy="553" r="4.5"/><circle cx="566" cy="562" r="4.5"/>
+    </g>
+    <!-- nose -->
+    <path d="M478 500 Q512 486 546 500 Q550 514 532 530 Q512 546 492 530 Q474 514 478 500 Z" fill="#191524" stroke="#14111F" stroke-width="4"/>
+    <ellipse cx="500" cy="502" rx="10" ry="5" fill="#FFFFFF" opacity="0.45"/>
+    <!-- mouth + fang -->
+    <path d="M512 538 L512 556 M464 546 Q488 588 512 556 Q536 588 560 546" fill="none" stroke="#14111F" stroke-width="7"/>
+    <path d="M530 571 L548 566 L543 590 Z" fill="#FBF7EE" stroke="#14111F" stroke-width="4"/>
+  </g>
+</svg>
