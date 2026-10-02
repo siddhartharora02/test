@@ -1,0 +1,14 @@
+{
+  "bed": {
+    "seconds": 749.3,
+    "quality": "final"
+  },
+  "wardrobe": {
+    "seconds": 688.3,
+    "quality": "final"
+  },
+  "window": {
+    "seconds": 704.1,
+    "quality": "final"
+  }
+}
