@@ -1,6 +1,14 @@
 {
-  "window": {
-    "seconds": 25.4,
+  "corner": {
+    "seconds": 34.7,
+    "quality": "preview"
+  },
+  "south": {
+    "seconds": 18.0,
+    "quality": "preview"
+  },
+  "bed": {
+    "seconds": 19.5,
     "quality": "preview"
   }
 }
