@@ -17,9 +17,12 @@ mascot/
   render_mascot.py    # SVG -> panther_1024.png / panther_2048.png (transparent), needs `pip install cairosvg`
 ```
 
-## Mascot v1 — panther
+## Mascot v2 — panther (current)
 
-Chibi black panther, front-facing, flexing one arm, other paw on hip.
-Palette: fur #1D1A2E→#3A3555 (blue-black, never pure black), muzzle #5E5788, outline #14111F (9–10 px),
-eyes gold #FFD23F, AstraFit violet #7B5CFF (headband, wristband, inner ears), gold star #F4B12A–#FFE68A.
-Panther cues: faint rosette rings, cheek tufts, small rounded ears, almond eyes under determined brows, tiny fang.
+Style follows the owner's reference (Duolingo-like achievement art): flat colours, **no outlines**,
+chunky rounded shapes, hard-edged shade shapes on the right side, big expressive eyes with heavy lids,
+open grin, exaggerated pose. v1 (outlined cartoon) is in git history.
+Chibi black panther flexing one arm, paw on hip. Palette: fur #4B4878 / shade #383660 / light #6B67A3,
+muzzle #8C86C6, pupils/brows/nose #1E1C30, eyes gold #FFC93C, AstraFit violet #7B5CFF (headband,
+wristband), inner ears #A58BFF, gold star #FFC93C, mouth #7A1E3A, tongue #FF6B8B.
+Fur stays violet-indigo (not black) so it reads on the app's dark background.
