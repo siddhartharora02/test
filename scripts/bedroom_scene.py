@@ -55,10 +55,14 @@ VIEWS = {  # res = final size; previews are 0.4x
     "south": dict(file="bedroom_02_window_wardrobe.png", pos=(0.9, 3.4, 5.0), heading=-6.0, lens=22, shift_y=0.08, exposure=2.6, res=(900, 1600)),
     "bed": dict(file="bedroom_03_bed_wall.png", pos=(9.0, 0.8, 4.25), heading=90.0, lens=28, shift_y=0.03, exposure=2.7, res=(1600, 1000)),
 }
+# --finish wood: all laminate (bed, bedside, wardrobe) becomes a walnut-tone wood-grain mica.
+# --lights off: daylight only (cove, bedside lamps, niche LEDs switched off).
+WOOD_MICA = dict(tint="#A88466", value=1.2)
+DAYLIGHT = dict(exposure_add=3.0, wb=6500, tint=15)  # greenish sky through trees -> magenta tint
 QUALITY = {"preview": dict(scale=0.4, samples=24), "final": dict(scale=1.0, samples=128)}
 
 
-def mats():
+def mats(finish="latte"):
     acg = {n: fa.acg_maps(n) for n in fa.ACG_TEXTURES}
     M["cream"] = L.pbr_mat("wall_cream", acg["PaintedPlaster017"], size=2.2, color=srgb(COL["wall"]), color_var=0.06, rough=(0.75, 0.9), normal=0.15)
     M["latte"] = L.simple_mat("latte_laminate", srgb(COL["latte"]), rough=0.55, bump=0.04, bump_scale=600)
@@ -68,6 +72,10 @@ def mats():
     M["bedding"] = L.pbr_mat("bedding_white", acg["Fabric031"], size=0.2, color=srgb(COL["bedding"]), color_var=0.15, normal=0.6, rough=(0.8, 0.95), sheen=0.5)
     M["taupe_curtain"] = L.pbr_mat("blackout_taupe", fa.fetch_ph_texture("rough_linen", "2k"), size=0.27, color=srgb(COL["taupe"]), color_var=0.25, normal=0.8, rough=(0.85, 1.0), sheen=0.4)
     M["fan"] = L.simple_mat("fan_matte_white", srgb("#ECEAE5"), rough=0.4)
+    if finish == "wood":
+        ph = fa.fetch_ph_texture("oak_veneer_01", fa.PH_TEXTURES["oak_veneer_01"])
+        wm = WOOD_MICA
+        M["latte"] = M["greige_lam"] = L.pbr_mat("wood_mica", ph, size=1.0, rough=(0.4, 0.55), normal=0.25, value=wm["value"], tint=srgb(wm["tint"]), coat=0.1, coat_rough=0.35)
 
 
 def ceiling():
@@ -284,7 +292,14 @@ def _wardrobe_local():
     S.instance_on(A["brass_vase_03"], "niche_brass", c, (x1 - 0.8, 0.8), 4.2)
 
 
-def build():
+def lights_off():
+    for ob in bpy.data.objects:
+        if ob.type == "LIGHT" and ob.name.split("_")[0] in ("cove", "bedside", "niche"):
+            ob.hide_render = True
+    L.set_input(M["cove_led"].node_tree.nodes["Principled BSDF"], "Emission Strength", 0.0)
+
+
+def build(finish="latte", lights=True):
     t0 = time.time()
     fa.fetch_all()
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -293,7 +308,7 @@ def build():
     C["protos"] = L.collection("_protos")
     S.build_materials()
     lobby_mats_walnut()
-    mats()
+    mats(finish)
     S.load_assets()
     room()
     ceiling()
@@ -306,6 +321,8 @@ def build():
     po.data.size, po.data.size_y = F(OPEN_TOP), F(DOOR_Y[1] - WIN_Y[0])
     for key, v in VIEWS.items():
         S.make_camera(f"cam_{key}", dict(v, shift_x=0.0))
+    if not lights:
+        lights_off()
     print(f"[bedroom] built in {time.time() - t0:.1f}s")
 
 
@@ -320,8 +337,12 @@ def main():
     ap.add_argument("--view", default="all", choices=["all", *VIEWS])
     ap.add_argument("--quality", default="preview", choices=list(QUALITY))
     ap.add_argument("--out", default=os.path.join(S.REPO, "renders", "bedroom"))
+    ap.add_argument("--finish", default="latte", choices=["latte", "wood"])
+    ap.add_argument("--lights", default="on", choices=["on", "off"])
     args = ap.parse_args(argv)
-    build()
+    lit = args.lights == "on"
+    build(args.finish, lit)
+    suffix = ("" if args.finish == "latte" else f"_{args.finish}") + ("" if lit else "_daylight")
     S.setup_render("preview")
     sc = bpy.context.scene
     q = QUALITY[args.quality]
@@ -334,15 +355,15 @@ def main():
         v = VIEWS[key]
         sc.camera = bpy.data.objects[f"cam_{key}"]
         sc.render.resolution_x, sc.render.resolution_y = (round(n * q["scale"]) for n in v["res"])
-        sc.view_settings.exposure = v["exposure"]
-        sc.view_settings.white_balance_temperature = 4300
-        sc.view_settings.white_balance_tint = -40  # AgX + cream interreflection drift pink; pull toward green
-        sc.render.filepath = os.path.join(out, v["file"])
+        sc.view_settings.exposure = v["exposure"] + (0 if lit else DAYLIGHT["exposure_add"])
+        sc.view_settings.white_balance_temperature = 4300 if lit else DAYLIGHT["wb"]
+        sc.view_settings.white_balance_tint = -40 if lit else DAYLIGHT["tint"]  # lamps + cream walls drift pink under AgX; daylight runs green
+        sc.render.filepath = os.path.join(out, v["file"].replace(".png", f"{suffix}.png"))
         t = time.time()
         bpy.ops.render.render(write_still=True)
         times[key] = round(time.time() - t, 1)
         print(f"[render] bedroom {key}: {times[key]:.1f}s -> {sc.render.filepath}", flush=True)
-    with open(os.path.join(out, "render_times.json"), "w") as f:
+    with open(os.path.join(out, f"render_times{suffix}.json"), "w") as f:
         json.dump({k: {"seconds": s, "quality": args.quality} for k, s in times.items()}, f, indent=2)
 
 
