@@ -138,11 +138,12 @@ dim_h([0, 5.0, 8.5, 14.75, L], W + 2.0, 18)
 add(f'<text x="{X(-0.3)}" y="{Y(W+2.0)+4}" class="dimlab" text-anchor="end">COB C3–C5</text>')
 lx, ly = X(0), Y(W + 3.4)
 leg = [
-    ("dl", "Downlight ×4 — 12 W round recessed, 3000 K (or 3-in-1 CCT), wide 90–110° beam: general light"),
-    ("cob", "COB spot ×5 — 7 W, 3000 K, 24–36° beam, anti-glare deep trim, tiltable; ~1'-0\" to 1'-6\" off the wall"),
-    ("txt", "C1–C2 over the side tables, graze the headboard wall · C3–C4 light the wardrobe shutters · C5 over the dresser/mirror"),
-    ("txt", "No light directly over the pillows (no glare lying down) — bedside lamps or wall lights for reading"),
-    ("txt", "Switching: A = downlights (2-way, door + bedside) · B = C1–C2 (bedside) · C = C3–C5 (door) · dimmer on A optional"),
+    ("dl", "Downlight ×4 — 12 W each (~1,100 lm), round recessed, 3000 K or 3-in-1 CCT  →  48 W"),
+    ("cob", "COB spot ×5 — 7 W each (~550 lm), 3000 K, 24–36° beam, anti-glare, tiltable  →  35 W"),
+    ("txt", "Cove light: none in this room.   TOTAL ≈ 83 W  (195 sq ft ≈ 0.4 W/sq ft, ~130 lux general light)"),
+    ("txt", "18 W downlights instead: 4 × 18 W ≈ 190 lux = too bright for a bedroom (OK only with a dimmer)."),
+    ("txt", "C1–C2 over the side tables · C3–C4 on the wardrobe · C5 over the dresser · no light over the pillows"),
+    ("txt", "Switching: A = downlights (2-way, door + bedside) · B = C1–C2 (bedside) · C = C3–C5 (door)"),
 ]
 for i, (k, t) in enumerate(leg):
     yy = ly + i * 30
