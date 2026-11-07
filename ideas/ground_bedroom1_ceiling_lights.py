@@ -23,8 +23,8 @@ def pool(x, y, r, color, op):
 
 DL = [("DL1", 3.5, 8.75), ("DL2", 8.0, 8.75), ("DL3", 12.75, 8.75), ("DL4", 12.75, 3.25)]
 COB = [("C1", 1.25, 1.0, "over side table"), ("C2", 9.25, 1.0, "over side table"),
-       ("C3", 5.0, 10.5, "wardrobe front"), ("C4", 8.5, 10.5, "wardrobe front"),
-       ("C5", 14.75, 6.0, "dresser / mirror")]
+       ("C3", 13.75, 6.0, "person at the dresser / mirror")]
+# Nothing over the wardrobe: DL1-DL2 at 8'-9" are 1'-3" in front of its shutters and light them.
 
 # floor
 add(f'<rect x="{X(0)}" y="{Y(0)}" width="{L*S}" height="{W*S}" fill="#f6f1e8"/>')
@@ -126,7 +126,7 @@ dim_h([0, 3.5, 8.0, 12.75, L], -2.1)            # downlight x positions (row y =
 add(f'<text x="{X(-0.3)}" y="{Y(-2.1)+4}" class="dimlab" text-anchor="end">downlights</text>')
 dim_h([0, 1.25, 9.25, L], -3.3)
 add(f'<text x="{X(-0.3)}" y="{Y(-3.3)+4}" class="dimlab" text-anchor="end">COB C1–C2</text>')
-dim_v([0, 1.0, 3.25, 6.0, 8.75, 10.5, W], L + 2.3)
+dim_v([0, 1.0, 3.25, 6.0, 8.75, W], L + 2.3)
 add(f'<text x="{X(L+2.3)}" y="{Y(-0.5)}" class="dimlab">from west wall</text>')
 
 # overall
@@ -134,16 +134,16 @@ add(f'<text x="{X(L/2)}" y="{Y(-4.6)}" class="title">Bed room-1 (ground floor, S
 add(f'<text x="{X(L/2)}" y="{Y(-4.0)+6}" class="sub">16\'-3" × 12\'-0", ceiling 10\'-0" · reflected ceiling plan · no cove light · furniture dashed = assumed layout</text>')
 
 # ---- legend ----
-dim_h([0, 5.0, 8.5, 14.75, L], W + 2.0, 18)
-add(f'<text x="{X(-0.3)}" y="{Y(W+2.0)+4}" class="dimlab" text-anchor="end">COB C3–C5</text>')
+dim_h([0, 13.75, L], W + 2.0, 18)
+add(f'<text x="{X(-0.3)}" y="{Y(W+2.0)+4}" class="dimlab" text-anchor="end">COB C3</text>')
 lx, ly = X(0), Y(W + 3.4)
 leg = [
     ("dl", "Downlight ×4 — 12 W each (~1,100 lm), round recessed, 3000 K or 3-in-1 CCT  →  48 W"),
-    ("cob", "COB spot ×5 — 7 W each (~550 lm), 3000 K, 24–36° beam, anti-glare, tiltable  →  35 W"),
-    ("txt", "Cove light: none in this room.   TOTAL ≈ 83 W  (195 sq ft ≈ 0.4 W/sq ft, ~130 lux general light)"),
+    ("cob", "COB spot ×3 — 7 W each (~550 lm), 3000 K, 24–36° beam, anti-glare, tiltable  →  21 W"),
+    ("txt", "Cove light: none in this room.   TOTAL ≈ 69 W  (195 sq ft ≈ 0.35 W/sq ft, ~130 lux general light)"),
     ("txt", "18 W downlights instead: 4 × 18 W ≈ 190 lux = too bright for a bedroom (OK only with a dimmer)."),
-    ("txt", "C1–C2 over the side tables · C3–C4 on the wardrobe · C5 over the dresser · no light over the pillows"),
-    ("txt", "Switching: A = downlights (2-way, door + bedside) · B = C1–C2 (bedside) · C = C3–C5 (door)"),
+    ("txt", "C1–C2 over the side tables · C3 in front of the dresser (lights your face) · nothing over the wardrobe or the pillows"),
+    ("txt", "Switching: A = downlights (2-way, door + bedside) · B = C1–C2 (bedside) · C = C3 (door)"),
 ]
 for i, (k, t) in enumerate(leg):
     yy = ly + i * 30
