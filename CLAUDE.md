@@ -10,6 +10,7 @@ scripts/
   office_scene.py   # builds the office + renders views. CONFIG block (feet) at the top.
   office_lib.py     # geometry / material / generated-image / asset-import helpers
   fetch_assets.py   # downloads + caches Poly Haven and ambientCG assets into assets/
+plans/              # architect's floor plans (PDF + PNG): ground floor, first floor (option 02 = final)
 assets/             # git-ignored download cache (~600 MB). Safe to delete; re-fetched on next run.
 renders/            # final renders (committed). renders/previews/ = low-res checks.
 ```
@@ -51,6 +52,26 @@ storage wall = video-call backdrop), `cutaway` (high 3/4 view, ceiling + south &
 - Always render previews first, look at them, fix problems, then run finals.
 - Long renders go in the background with `nohup` and get polled (tool calls time out).
 - Commit scripts, `CLAUDE.md` and `renders/` (PNGs + `render_times.json`); never `assets/` or `*.log`.
+
+## Whole house (architect's plans in `plans/`)
+
+30' × 60' plot, **road on the east**, south-east corner plot. On the sheets: top = west, right = north,
+bottom = east (road), left = south. Building is 30' (S→N) × 53' (W→E) with a 7' front setback to the
+boundary wall and gate on the east.
+
+- `plans/ground_floor.pdf|png` — "Ground floor door & window plan", dated 04-01-2025.
+- `plans/first_floor.pdf|png` — **first floor option 02 = the chosen one.** Option 01 is kept only for
+  reference in `plans/first_floor_options_01_02.pdf`; the two differ **only** in the outdoor stair in the
+  sit-out (01: straight U-turn stair along the lobby wall; 02: L-shaped, lower flight along the office's
+  south wall, upper flight along the lobby's east wall).
+
+| Zone (west → east) | Ground floor | First floor (option 02) |
+|---|---|---|
+| West strip, S → N | Toilet 12'-6"×5'-6", open shaft 8'-3"×5'-6", toilet 7'-0"×5'-6" | Toilet 9'-0"×5'-6", dress 7'-0"×5'-6", "zall / open" shaft, toilet 7'-0"×5'-6" |
+| Bedrooms | Bed room-1 16'-3"×12'-0" (S), bed room-2 11'-10½"×12'-0" (N) | Bed room-1 16'-3"×12'-0" (S), room 11'-10½"×12'-0" (N) |
+| Middle | Lobby 28'-10½"×16'-0", internal U-stair on the north side | Lobby 22'-0"×16'-0", same internal stair |
+| Front (east), S side | Kitchen 12'-0"×13'-7½", porch 18'-6"×9'-10½" in front | Open sit-out (over kitchen + porch) with the outdoor stair up |
+| Front (east), N side | Entrance passage 5'-0" wide, drawing 10'-9"×12'-0", powder 7'-9"×4'-6" | Passage 5'-0", **office 16'-1½"×12'-0"** (rendered), pantry 10'-4½"×4'-6" |
 
 ## Coordinate system
 
