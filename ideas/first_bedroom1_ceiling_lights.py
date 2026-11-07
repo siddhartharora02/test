@@ -30,9 +30,9 @@ add = parts.append
 
 # 4 downlights, symmetric about the tray/fan centre (8'-1½", 6'-0")
 DL = [("DL1", 4.5, 3.5), ("DL2", 11.75, 3.5), ("DL3", 11.75, 8.5), ("DL4", 4.5, 8.5)]
-COB = [("C1", 2.25, 11.0), ("C2", 9.75, 11.0),      # headboard wall, beside the bed
-       ("C3", 3.5, 1.0), ("C4", 8.5, 1.0)]          # TV wall, either side of the TV
-# Nothing over the cupboard: a spot above a 2'-deep unit only lights its top. DL1 sits 1'-9" in front of it.
+# COB: 4 per long wall, 4'-0" c/c, 1'-0" off the wall, symmetric about the room centre -> even band all round
+COB_X = [L / 2 - 6, L / 2 - 2, L / 2 + 2, L / 2 + 6]
+COB = [(f"C{i+1}", x, 1.0) for i, x in enumerate(COB_X)] + [(f"C{i+5}", x, W - 1.0) for i, x in enumerate(COB_X)]
 
 def rrect(x0, y0, x1, y1, r, **kw):
     a = " ".join(f'{k.replace("_", "-")}="{v}"' for k, v in kw.items())
@@ -72,7 +72,6 @@ furn(3.4, 10.0, 5.8, 11.4); furn(6.2, 10.0, 8.6, 11.4)   # pillows
 add(f'<text x="{X(6.0)}" y="{Y(7.6)}" class="furn">BED</text>')
 furn(9.3, 10.4, 10.8, 11.9)
 furn(0.0, 0.3, 2.0, 5.6, "CUPBOARD / STUDY", 12, rot=True)
-furn(4.0, 0.0, 8.0, 1.3, "TV unit", 12)
 
 # fan
 fx, fy = FAN
@@ -104,7 +103,7 @@ vwall(-T, W + T, L, 1)                                                          
 def lab(x, y, txt, rot=0, cls="door"):
     tr = f' transform="rotate({rot} {X(x)} {Y(y)})"' if rot else ""
     add(f'<text x="{X(x)}" y="{Y(y)}" class="{cls}"{tr}>{txt}</text>')
-lab(5.0, -0.75, "WEST wall · TV wall")
+lab(5.0, -0.75, "WEST wall")
 lab(11.4, -0.75, "D3 → dress")
 lab(14.8, -0.75, "D2 → open")
 lab(5.5, W + 1.0, "EAST wall · bed headboard")
@@ -129,8 +128,10 @@ add(f'<text x="{X(L-1.0)}" y="{Y(6.0)}" class="band" transform="rotate(90 {X(L-1
 
 # ---- dimension chains ----
 def ftin(v):
-    f, i = divmod(round(v * 12), 12)
-    return f"{f}'-{i}\""
+    h = round(v * 24)                      # half inches
+    f, r = divmod(h, 24)
+    i, half = divmod(r, 2)
+    return f"{f}'-{i}{'½' if half else ''}\""
 def dim_h(xs, y, lbl, off=-8):
     yy = Y(y)
     add(f'<line x1="{X(xs[0])}" y1="{yy}" x2="{X(xs[-1])}" y2="{yy}" class="dim"/>')
@@ -148,9 +149,9 @@ def dim_v(ys, x, lbl):
         add(f'<text x="{xx+10}" y="{(Y(a)+Y(b))/2+4}" class="dimt" text-anchor="start">{ftin(b-a)}</text>')
     add(f'<text x="{xx}" y="{Y(ys[0])-12}" class="dimlab">{lbl}</text>')
 
-dim_h([0, 3.5, 8.5, L], -2.0, "COB C3–C4")
+dim_h([0] + COB_X + [L], -2.0, "COB C1–C4")
 dim_h([0, 4.5, 11.75, L], -3.1, "downlights")
-dim_h([0, 2.25, 9.75, L], W + 2.0, "COB C1–C2", 18)
+dim_h([0] + COB_X + [L], W + 2.0, "COB C5–C8", 18)
 dim_v([0, 1.0, 3.5, 8.5, 11.0, W], L + 2.3, "from west wall")
 
 add(f'<text x="{X(L/2)}" y="{Y(-4.6)}" class="title">First floor bed room-1 (SW) — ceiling lighting idea</text>')
@@ -160,12 +161,11 @@ add(f'<text x="{X(L/2)}" y="{Y(-4.0)+6}" class="sub">16\'-3" × 12\'-0" · view 
 lx, ly = X(0), Y(W + 3.4)
 leg = [
     ("dl", "Downlight ×4 — 12 W, 3000 K (or 3-in-1), symmetric in the tray, ~4' from the fan · deep anti-glare trim  →  48 W"),
-    ("cob", "COB spot ×4 — 7 W, 3000 K, 24–36°, anti-glare, tiltable · C1–C2 headboard wall · C3–C4 TV wall  →  28 W"),
+    ("cob", "COB spot ×8 — 7 W, 3000 K, 24–36°, anti-glare · 4 per long wall, 4'-0\" apart, 1'-0\" off the wall  →  56 W"),
     ("cove", "Cove strip ≈12 m in the tray groove — 3000 K, 8–10 W/m, with dimmer + 150 W driver  →  ≈ 100–120 W"),
-    ("txt", "No light over the cupboard (it would only light its top) — DL1 is 2'-6\" in front of it, so open shelves are lit"),
     ("txt", "Study niche: LED profile under the shelf above the desk (a furniture light, not a ceiling light)"),
-    ("txt", "Total all ON ≈ 175–195 W · night mode = cove only (dimmed) or C1–C2 only"),
-    ("txt", "Switching: 1) downlights (door + bedside 2-way)  2) cove (bedside, dimmer)  3) C1–C2 (bedside)  4) C3–C4 (door)  + fan"),
+    ("txt", "Total all ON ≈ 205–225 W · night mode = cove only (dimmed)"),
+    ("txt", "Switching: 1) downlights (door + bedside 2-way)  2) cove (bedside, dimmer)  3) C5–C8 (bedside)  4) C1–C4 (door)  + fan"),
 ]
 for i, (k, t) in enumerate(leg):
     yy = ly + i * 30
