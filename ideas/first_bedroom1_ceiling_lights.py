@@ -28,7 +28,8 @@ def Y(y): return OY + y * S
 parts = []
 add = parts.append
 
-DL = [("DL1", 3.75, 3.25), ("DL2", 11.25, 3.25), ("DL3", 11.25, 8.75)]
+# 4 downlights, symmetric about the tray/fan centre (8'-1½", 6'-0")
+DL = [("DL1", 4.5, 3.5), ("DL2", 11.75, 3.5), ("DL3", 11.75, 8.5), ("DL4", 4.5, 8.5)]
 COB = [("C1", 2.25, 11.0), ("C2", 9.75, 11.0),      # headboard wall, beside the bed
        ("C3", 3.5, 1.0), ("C4", 8.5, 1.0)]          # TV wall, either side of the TV
 # Nothing over the cupboard: a spot above a 2'-deep unit only lights its top. DL1 sits 1'-9" in front of it.
@@ -148,9 +149,9 @@ def dim_v(ys, x, lbl):
     add(f'<text x="{xx}" y="{Y(ys[0])-12}" class="dimlab">{lbl}</text>')
 
 dim_h([0, 3.5, 8.5, L], -2.0, "COB C3–C4")
-dim_h([0, 3.75, 11.25, L], -3.1, "downlights")
+dim_h([0, 4.5, 11.75, L], -3.1, "downlights")
 dim_h([0, 2.25, 9.75, L], W + 2.0, "COB C1–C2", 18)
-dim_v([0, 1.0, 3.25, 8.75, 11.0, W], L + 2.3, "from west wall")
+dim_v([0, 1.0, 3.5, 8.5, 11.0, W], L + 2.3, "from west wall")
 
 add(f'<text x="{X(L/2)}" y="{Y(-4.6)}" class="title">First floor bed room-1 (SW) — ceiling lighting idea</text>')
 add(f'<text x="{X(L/2)}" y="{Y(-4.0)+6}" class="sub">16\'-3" × 12\'-0" · view looking UP at the ceiling · furniture dashed (from site photos) · band / tray sizes approx.</text>')
@@ -158,12 +159,12 @@ add(f'<text x="{X(L/2)}" y="{Y(-4.0)+6}" class="sub">16\'-3" × 12\'-0" · view 
 # ---- legend ----
 lx, ly = X(0), Y(W + 3.4)
 leg = [
-    ("dl", "Downlight ×3 — 12 W, 3000 K (or 3-in-1), wide beam · all ≥ 3'-0\" from the fan, none over the bed  →  36 W"),
+    ("dl", "Downlight ×4 — 12 W, 3000 K (or 3-in-1), symmetric in the tray, ~4' from the fan · deep anti-glare trim  →  48 W"),
     ("cob", "COB spot ×4 — 7 W, 3000 K, 24–36°, anti-glare, tiltable · C1–C2 headboard wall · C3–C4 TV wall  →  28 W"),
     ("cove", "Cove strip ≈12 m in the tray groove — 3000 K, 8–10 W/m, with dimmer + 150 W driver  →  ≈ 100–120 W"),
-    ("txt", "No light over the cupboard (it would only light its top) — DL1 is 1'-9\" in front of it, so open shelves are lit"),
+    ("txt", "No light over the cupboard (it would only light its top) — DL1 is 2'-6\" in front of it, so open shelves are lit"),
     ("txt", "Study niche: LED profile under the shelf above the desk (a furniture light, not a ceiling light)"),
-    ("txt", "Total all ON ≈ 165–185 W · night mode = cove only (dimmed) or C1–C2 only"),
+    ("txt", "Total all ON ≈ 175–195 W · night mode = cove only (dimmed) or C1–C2 only"),
     ("txt", "Switching: 1) downlights (door + bedside 2-way)  2) cove (bedside, dimmer)  3) C1–C2 (bedside)  4) C3–C4 (door)  + fan"),
 ]
 for i, (k, t) in enumerate(leg):

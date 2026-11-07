@@ -48,6 +48,8 @@ storage wall = video-call backdrop), `cutaway` (high 3/4 view, ceiling + south &
 
 ## Workflow rules
 
+- Replies: even when the user writes in Hindi/Hinglish, reply in **English**. Keep every reply as short as
+  possible: a few lines, no long write-ups, tables or headings unless asked.
 - All dimensions live in the CONFIG block at the top of `office_scene.py`, **in feet**.
 - Always render previews first, look at them, fix problems, then run finals.
 - Long renders go in the background with `nohup` and get polled (tool calls time out).
